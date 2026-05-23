@@ -1,0 +1,1745 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Re-kyu concept</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://use.typekit.net/rdl5vgu.css">
+<style>
+  :root {
+    /* Numazu Club palette */
+    --bg:      #E3DFD9;
+    --bg-alt:  #EEEDE9;
+    --bg-card: #DDDAD4;
+    --bg-dark: #3C3C3C;
+
+    --text:     #3C3C3C;
+    --text-mid: #5C5C5C;
+    --text-dim: #858687;
+    --text-light: #C7C5BF;
+
+    --line:     rgba(60,60,60,0.12);
+    --line-dark: rgba(255,255,255,0.15);
+    --accent:   #3C3C3C;
+    --silver:   #3C3C3C;
+    --silver-dim: #858687;
+
+    /* hero/film (keep dark) */
+    --black:      #0a0a0a;
+    --black-light: #111111;
+    --black-mid:  #1a1a1a;
+    --gold:       #b8a06a;
+    --gold-light: #d4c08e;
+    --gold-dim:   #8a7545;
+    --white:      #e8e4dc;
+    --white-dim:  #9a968e;
+    --white-muted:#6a665e;
+    --border:     rgba(184,160,106,0.15);
+    --border-light: rgba(255,255,255,0.06);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: "Shippori Mincho", serif;
+    background: var(--bg);
+    color: var(--text);
+    overflow-x: hidden;
+  }
+
+  ::selection {
+    background: var(--bg-dark);
+    color: var(--bg);
+  }
+  .nav-overlay ::selection {
+    background: transparent;
+    color: inherit;
+  }
+
+  /* ===== SCROLL FADE ANIMATION ===== */
+  .fade-in {
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .slide-in {
+    opacity:0; transform: translateX(-30px);
+    transition: opacity 0.8s ease, transform 0.8s ease;
+  }
+  .slide-in.active { opacity:1; transform: translateX(0); }
+
+  /* ===== HEADER (Numazu Club style) ===== */
+  .site-header {
+    position: fixed;
+    top: -70px;
+    left: 0;
+    width: 100%;
+    background-color: #E3DFD9;
+    z-index: 1000;
+    transition: top 0.5s ease;
+  }
+  .site-header.nv-show {
+    top: 0;
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    height: 70px;
+    padding: 0 40px;
+  }
+  /* Logo */
+  .header-logo {
+    flex-shrink: 0;
+  }
+  .header-logo a {
+    text-decoration: none;
+    display: block;
+  }
+  .logo-text {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 26px;
+    font-weight: 400;
+    font-style: italic;
+    letter-spacing: 6px;
+    color: var(--text);
+    line-height: 1;
+  }
+  .logo-text .logo-dash {
+    font-style: normal;
+    letter-spacing: 2px;
+  }
+  .logo-sub {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 8px;
+    letter-spacing: 5px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-top: 5px;
+    display: block;
+  }
+  /* Nav */
+  .header-nav {
+    margin-left: 0;
+  }
+  .header-nav ul {
+    list-style: none;
+    display: flex;
+    margin: 0; padding: 0;
+  }
+  .header-nav ul li {
+    margin-right: 28px;
+    white-space: nowrap;
+  }
+  .header-nav ul li:last-child {
+    margin-right: 0;
+  }
+  .header-nav a {
+    text-decoration: none;
+    color: var(--text);
+    font-family: "garamond-premier-pro", serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    transition: opacity 0.3s;
+    display: block;
+    line-height: 1;
+  }
+  .header-nav a:hover { opacity: 0.5; }
+  /* Lang */
+  /* Hamburger (mobile) */
+  .hamburger {
+    display: none;
+    flex-direction: column;
+    gap: 6px;
+    cursor: pointer;
+    z-index: 1100;
+    margin-left: auto;
+  }
+  .hamburger span {
+    width: 26px;
+    height: 1px;
+    background: var(--text);
+    display: block;
+    transition: all 0.3s;
+  }
+
+  /* ===== DIVIDER ===== */
+  .section-divider {
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--line), transparent);
+  }
+
+  /* ===== HERO ===== */
+  .hero {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    background: var(--black);
+    color: var(--white);
+    max-width: 100%;
+    padding: 0 60px;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero-slides {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+  }
+  .hero-slide {
+    position: absolute;
+    inset: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 1.5s ease-in-out;
+  }
+  .hero-slide.active {
+    opacity: 1;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: rgba(10,10,10,0.7);
+    pointer-events: none;
+    z-index: 1;
+  }
+  .hero h1,
+  .hero .sub {
+    position: relative;
+    z-index: 2;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 1px;
+    height: 80px;
+    background: linear-gradient(to bottom, transparent, var(--gold-dim));
+    animation: scrollLine 2s ease-in-out infinite;
+  }
+  @keyframes scrollLine {
+    0%, 100% { opacity: 0.3; }
+    50% { opacity: 1; }
+  }
+  .logo-hyphen {
+    display: inline-block;
+    width: 1.3em;
+    text-align: center;
+    transform: rotate(90deg);
+    vertical-align: middle;
+    position: relative;
+    left: -7px;
+  }
+  .hero .logo-hero {
+    position: absolute;
+    right: calc(40% - 310px);
+    top: 25%;
+    transform: translateY(-70%);
+    z-index: 2;
+    writing-mode: vertical-rl;
+    text-orientation: upright;
+    text-align: start;
+    font-family: "garamond-premier-pro", serif;
+    font-size: 20px;
+    letter-spacing: 7px;
+    line-height: 2.2;
+    color: var(--gold-dim);
+    text-transform: uppercase;
+    pointer-events: none;
+  }
+  .hero h1 {
+    font-size: 34px;
+    font-weight: 400;
+    letter-spacing: 10px;
+    line-height: 2.2;
+    margin-bottom: 40px;
+    color: var(--white);
+  }
+  .hero .sub {
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--white-muted);
+    font-family: "garamond-premier-pro", serif;
+  }
+  .hero-poem {
+    position: relative;
+    z-index: 2;
+    font-size: 15px;
+    line-height: 2.4;
+    letter-spacing: 3px;
+    color: var(--white-dim);
+    margin-top: 40px;
+    max-width: 700px;
+  }
+
+  /* ===== SCROLL INTERLUDE ===== */
+  .scroll-interlude {
+    width: 100%;
+    height: 220px;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start;
+    padding-top: 50px;
+    gap: 20px;
+  }
+  .scroll-interlude-label {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--white-muted);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px;
+    height: 80px;
+    position: relative;
+    overflow: hidden;
+  }
+  .scroll-line::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 1px; height: 0;
+    background: linear-gradient(to bottom, transparent, var(--white-muted));
+    animation: scrollLineGrow 3s ease-out 1 forwards;
+  }
+  @keyframes scrollLineGrow {
+    0%   { height: 0;    opacity: 0; }
+    10%  { opacity: 1; }
+    100% { height: 100%; opacity: 1; }
+  }
+
+  /* ===== BRAND FILM ===== */
+  .brand-film {
+    width: 100%;
+    max-width: 100%;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
+  }
+  /* brand-film::after gradient removed */
+  .brand-film-inner {
+    width: 100%;
+    height: 100vh;
+    background: var(--black);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .brand-film-inner::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: radial-gradient(ellipse at center, rgba(26,26,26,0.6) 0%, var(--black) 70%);
+    pointer-events: none;
+  }
+  .ripple-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .water-reflection {
+    position: absolute;
+    inset: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .play-button {
+    width: 100px; height: 100px;
+    border: 1px solid var(--gold-dim);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.5s ease;
+    position: relative;
+    z-index: 1;
+    margin-bottom: 50px;
+  }
+  .play-button:hover {
+    border-color: var(--gold-light);
+    transform: scale(1.08);
+    box-shadow: 0 0 40px rgba(184,160,106,0.15);
+  }
+  .play-button span {
+    display: block;
+    width: 0; height: 0;
+    border-style: solid;
+    border-width: 14px 0 14px 24px;
+    border-color: transparent transparent transparent var(--gold-dim);
+    margin-left: 6px;
+    transition: border-color 0.4s ease;
+  }
+  .play-button:hover span {
+    border-color: transparent transparent transparent var(--gold-light);
+  }
+  .brand-film-text {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  .brand-film-text h2 {
+    writing-mode: vertical-rl;
+    text-align: start;
+    font-size: 22px;
+    font-weight: 400;
+    letter-spacing: 6px;
+    line-height: 1.8;
+    color: var(--white);
+    margin-bottom: 50px;
+  }
+  .brand-film-text p {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px;
+    letter-spacing: 4px;
+    color: var(--white);
+    font-style: italic;
+  }
+  .video-container {
+    position: relative;
+    width: 100%;
+    max-width: 960px;
+    margin: 0 auto 40px;
+    padding-bottom: 56.25%;
+    height: 0;
+    overflow: hidden;
+  }
+  .video-container iframe,
+  .video-container video {
+    position: absolute;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    border: none;
+    object-fit: cover;
+  }
+
+  /* ===== PATTERN 5: SECTION COMMON ===== */
+  .p5-section {
+    padding: 140px 80px;
+    max-width: 1440px;
+    margin: 0 auto;
+  }
+  .s-label {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px; letter-spacing: 6px;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 60px;
+    padding-bottom: 16px;
+    border-bottom: 1px solid var(--line);
+    display: inline-block;
+  }
+
+  /* ===== PHILOSOPHY (Pattern 5) ===== */
+  .phil-header {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; margin-bottom: 100px;
+    align-items: end;
+  }
+  .phil-header h2 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 24px; font-weight: 400;
+    letter-spacing: 6px; line-height: 1.8;
+    color: var(--text);
+  }
+  .phil-header .desc {
+    font-size: 14px; line-height: 2.2;
+    color: var(--text-mid);
+    border-left: 1px solid var(--line);
+    padding-left: 30px;
+  }
+  .phil-header .desc .en {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px; font-style: italic;
+    color: var(--text-dim); margin-bottom: 12px;
+    display: block;
+  }
+  .phil-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 80px 48px;
+  }
+  .phil-cell {
+    padding: 0;
+    transition: opacity 0.4s;
+    position: relative;
+    background: transparent;
+  }
+  .phil-cell:hover { opacity: 0.85; }
+  .phil-cell .num {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 24px; font-style: italic;
+    color: var(--text-light); margin-bottom: 20px;
+  }
+  .phil-cell .img-area {
+    width: 100%; height: 280px;
+    background: var(--bg-card);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 14px; letter-spacing: 2px;
+    margin-bottom: 28px;
+    overflow: hidden;
+  }
+  .phil-cell h3 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 14px; font-weight: 500;
+    letter-spacing: 3px; margin-bottom: 16px;
+    color: var(--text);
+  }
+  .phil-cell p {
+    font-size: 14px; line-height: 2.2;
+    color: var(--text-mid);
+  }
+
+  /* ===== WORKS (Pattern 5) ===== */
+  .works-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 0;
+    border: 1px solid var(--line);
+    margin-bottom: 60px;
+  }
+  .works-card {
+    padding: 0;
+    border-right: 1px solid var(--line);
+    transition: background 0.4s;
+    background: var(--bg);
+  }
+  .works-card:last-child { border-right: none; }
+  .works-card:hover { background: var(--bg-alt); }
+  .works-card .img-area {
+    width: 100%; height: 260px;
+    background: var(--bg-card);
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 14px; letter-spacing: 2px;
+    font-family: "garamond-premier-pro", serif;
+    position: relative;
+  }
+  .works-card .img-area::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      linear-gradient(to right, var(--line) 1px, transparent 1px),
+      linear-gradient(to bottom, var(--line) 1px, transparent 1px);
+    background-size: 33.33% 50%;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .works-card .card-body {
+    padding: 32px 28px;
+  }
+  .works-card h3 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 16px; font-weight: 400;
+    letter-spacing: 3px; line-height: 1.8;
+    margin-bottom: 20px;
+    color: var(--text);
+  }
+  .works-meta {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 2px;
+    line-height: 2;
+  }
+  .works-meta span { display: inline-block; margin-right: 8px; }
+  .works-meta span::before { content: '/'; margin-right: 8px; color: var(--text-light); }
+  .works-meta span:first-child::before { content: none; }
+  .view-all { text-align: right; }
+  .view-all a {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px; letter-spacing: 3px;
+    color: var(--text-dim); text-decoration: none;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 4px; transition: all 0.3s;
+  }
+  .view-all a:hover { color: var(--text); border-color: var(--text); }
+
+  /* ===== CRAFTSMANSHIP (Pattern 5) ===== */
+  .craft-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; border: 1px solid var(--line);
+  }
+  .craft-cell {
+    padding: 50px 36px;
+    border-right: 1px solid var(--line);
+    transition: background 0.4s;
+    background: var(--bg);
+  }
+  .craft-cell:last-child { border-right: none; }
+  .craft-cell:hover { background: var(--bg-alt); }
+  .craft-cell .icon-area {
+    width: 60px; height: 60px;
+    border: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 32px;
+    font-family: "garamond-premier-pro", serif;
+    font-size: 20px; font-style: italic;
+    color: var(--text-light);
+  }
+  .craft-cell h3 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 16px; font-weight: 400;
+    letter-spacing: 4px; margin-bottom: 24px;
+    color: var(--text);
+  }
+  .craft-cell p { font-size: 14px; line-height: 2.4; color: var(--text-mid); }
+
+  /* ===== PROCESS (Pattern 5) ===== */
+  .process-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; border: 1px solid var(--line);
+  }
+  .process-cell {
+    padding: 44px 32px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    transition: background 0.4s;
+    position: relative;
+    background: var(--bg);
+  }
+  .process-cell:nth-child(3), .process-cell:nth-child(6) { border-right: none; }
+  .process-cell:nth-child(4), .process-cell:nth-child(5), .process-cell:nth-child(6) { border-bottom: none; }
+  .process-cell:hover { background: var(--bg-alt); }
+  .process-cell .step-num {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 36px; font-style: italic;
+    color: var(--text-light); margin-bottom: 20px; letter-spacing: 2px;
+  }
+  .process-cell h3 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 15px; font-weight: 400;
+    letter-spacing: 4px; margin-bottom: 18px; color: var(--text);
+  }
+  .process-cell p { font-size: 14px; line-height: 2.2; color: var(--text-mid); }
+  .process-cell .connector {
+    position: absolute; right: -14px; top: 50%;
+    transform: translateY(-50%);
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px; color: var(--text-light);
+    z-index: 1; background: var(--bg); padding: 4px;
+  }
+  .process-cell:nth-child(3) .connector,
+  .process-cell:nth-child(6) .connector { display: none; }
+
+  /* ===== NEWS (re-kyu.jp style) ===== */
+  .news-header {
+    display: grid;
+    grid-template-columns: 1fr 5fr;
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    margin-bottom: 0;
+  }
+  .news-header .news-date {
+    padding: 28px 24px;
+    border-right: 1px solid var(--line);
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+  }
+  .news-header .news-headline {
+    padding: 28px 36px;
+    font-family: "Shippori Mincho", serif;
+    font-size: 16px;
+    font-weight: 400;
+    letter-spacing: 2px;
+    line-height: 1.9;
+    color: var(--text);
+    display: flex;
+    align-items: center;
+  }
+  .news-body-row {
+    display: grid;
+    grid-template-columns: 2fr 3fr;
+    gap: 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .news-img-col {
+    padding: 40px 36px 40px 0;
+    border-right: 1px solid var(--line);
+  }
+  .news-img-col img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .news-table-col {
+    padding: 40px 0 40px 36px;
+  }
+  .schedule-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+  }
+  .schedule-table th,
+  .schedule-table td {
+    padding: 10px 14px;
+    text-align: left;
+    border-bottom: 1px solid var(--line);
+    vertical-align: top;
+    line-height: 1.8;
+  }
+  .schedule-table th {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-dim);
+    background: var(--bg-alt);
+    font-weight: 400;
+    border-bottom: 1px solid var(--line);
+  }
+  .schedule-table td { color: var(--text-mid); }
+  .schedule-table td:first-child {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px;
+    color: var(--text-dim);
+    white-space: nowrap;
+    width: 60px;
+  }
+  .schedule-table td:nth-child(2) {
+    font-family: "garamond-premier-pro", serif;
+    color: var(--text-dim);
+    white-space: nowrap;
+    width: 80px;
+  }
+  .schedule-table tr:hover td { background: var(--bg-alt); }
+
+  /* ===== JOURNAL (Pattern 5) ===== */
+  .journal-grid {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 0; border: 1px solid var(--line);
+  }
+  .journal-card {
+    padding: 0; border-right: 1px solid var(--line);
+    transition: background 0.4s; cursor: pointer;
+    background: var(--bg);
+  }
+  .journal-card:last-child { border-right: none; }
+  .journal-card:hover { background: var(--bg-alt); }
+  .journal-card .img-area {
+    width: 100%; height: 200px;
+    background: var(--bg-card); border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--text-dim); font-size: 14px; letter-spacing: 2px;
+    font-family: "garamond-premier-pro", serif;
+  }
+  .journal-card .card-body { padding: 28px 24px; }
+  .journal-card .tag {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px; letter-spacing: 2px; color: var(--text-dim);
+    border: 1px solid var(--line); display: inline-block;
+    padding: 4px 12px; margin-bottom: 16px;
+  }
+  .journal-card h3 {
+    font-family: "Shippori Mincho", serif;
+    font-size: 14px; font-weight: 400;
+    letter-spacing: 2px; line-height: 1.8;
+    margin-bottom: 16px; color: var(--text);
+  }
+  .journal-card .date {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 14px; color: var(--text-dim); letter-spacing: 2px;
+  }
+
+  /* ===== IMAGE BREAK ===== */
+  .image-break { width: 100%; max-width: 100%; height: 50vh; position: relative; overflow: hidden; }
+  .image-break img { width: 100%; height: 100%; object-fit: cover; }
+  .image-break::after {
+    content: '';
+    position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+    background: linear-gradient(to bottom, var(--bg), transparent 20%, transparent 80%, var(--bg));
+    pointer-events: none;
+  }
+
+  /* ===== PROFILE (Pattern 5) ===== */
+  #profile { max-width:100%; background: var(--bg-alt); padding: 140px 40px; }
+  #profile .inner { max-width:1300px; margin: 0 auto; }
+  .profile-top {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 60px; margin-bottom: 80px; align-items: end;
+  }
+  .profile-top h2 {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 32px; font-weight: 400;
+    letter-spacing: 6px; color: var(--text);
+  }
+  .profile-top .sub {
+    font-size: 14px; color: var(--text-dim); letter-spacing: 4px;
+    border-left: 1px solid var(--line); padding-left: 30px;
+  }
+  .pf-group { margin-bottom: 50px; }
+  .pf-group h3 {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px; letter-spacing: 4px;
+    color: var(--text-dim); text-transform: uppercase;
+    padding-bottom: 14px; margin-bottom: 20px;
+    border-bottom: 1px solid var(--line); font-weight: 400;
+  }
+  .pf-row {
+    display: grid; grid-template-columns: 160px 1fr;
+    gap: 20px; font-size: 14px; line-height: 2;
+    padding: 6px 0; border-bottom: 1px solid var(--line);
+  }
+  .pf-row .l { color: var(--text-dim); font-size: 14px; letter-spacing: 1px; }
+  .pf-row .v { color: var(--text-mid); }
+
+  /* ===== MEMBERS HORIZONTAL LAYOUT ===== */
+  .pf-members-grid {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin-bottom: 60px;
+  }
+  /* Lead: 高松伸 — 25% wider than each team member */
+  .pf-lead {
+    flex: 1.25;
+    padding-right: 56px;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+  }
+  /* Vertical divider — starts at top of section tag area */
+  .pf-lead::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--line);
+  }
+  /* Team: 鈴木+刀祢平 side by side */
+  .pf-team-group {
+    flex: 2;
+    display: flex;
+    gap: 0;
+  }
+  .pf-team-member {
+    flex: 1;
+    padding-left: 48px;
+    padding-right: 24px;
+    display: flex;
+    flex-direction: column;
+  }
+  .pf-team-member:last-child { padding-right: 0; }
+
+  /* Photo containers */
+  .pf-member-photo {
+    width: 100%;
+    aspect-ratio: 2 / 3;
+    background: var(--bg-card);
+    border: 1px solid var(--line);
+    overflow: hidden;
+    margin-bottom: 28px;
+    flex-shrink: 0;
+    position: relative;
+  }
+  .pf-member-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* Photo section labels (PRODUCER / TEAM) — above photos */
+  .pf-section-tag-area {
+    display: flex;
+    align-items: flex-start;
+    margin-bottom: 20px;
+  }
+  .pf-section-tag {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    font-weight: 400;
+    line-height: 1;
+  }
+
+  /* Name / role labels */
+  .pf-member-name {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 20px; font-weight: 400;
+    letter-spacing: 5px; color: var(--text);
+    margin-bottom: 6px;
+  }
+  .pf-member-role {
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px; letter-spacing: 3px;
+    color: var(--text-dim); text-transform: uppercase;
+    margin-bottom: 24px;
+  }
+
+  /* ===== CONTACT (Pattern 5) ===== */
+  #contact {
+    max-width:100%; text-align:center; padding: 140px 40px;
+    background: #5C5C5C; border-top: none;
+    color: #e8e4dc;
+  }
+  #contact .s-label {
+    color: #e8e4dc;
+    border-bottom-color: #e8e4dc;
+  }
+  .contact-address {
+    font-size: 14px; line-height:2.4; color: #e8e4dc;
+    letter-spacing:2px; margin-bottom:30px;
+  }
+  .contact-map {
+    width: 100vw;
+    max-width: 1440px;
+    margin-left: 50%;
+    transform: translateX(-50%);
+    margin-bottom: 0;
+  }
+  .contact-map img {
+    width: 100%; height: auto;
+    display: block;
+  }
+  .contact-map-address {
+    font-size: 14px; letter-spacing: 2px;
+    color: #e8e4dc; line-height: 1.8;
+    margin-top: 32px;
+    margin-bottom: 50px;
+  }
+  .contact-person { font-size: 14px; line-height:2.4; color: #e8e4dc; }
+  .contact-person a {
+    color: #e8e4dc; text-decoration:none;
+    border-bottom: 1px solid rgba(232,228,220,0.4);
+    transition: all 0.3s; padding-bottom: 2px;
+  }
+  .contact-person a:hover { color: #ffffff; border-color: #ffffff; }
+
+  /* ===== MOBILE NAV OVERLAY (Numazu Club style) ===== */
+  .nav-overlay {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    background: #5C5C5C;
+    z-index: 1200;
+    display: flex;
+    flex-direction: column;
+    padding: 80px 48px 48px;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    overflow-y: auto;
+  }
+  .nav-overlay.open {
+    opacity: 1;
+    visibility: visible;
+  }
+  .nav-overlay-close {
+    position: absolute;
+    top: 24px; right: 28px;
+    background: none; border: none; outline: none;
+    -webkit-appearance: none; appearance: none;
+    color: #e8e4dc;
+    cursor: pointer;
+    z-index: 1300;
+    padding: 4px;
+    width: 26px;
+    height: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    -webkit-tap-highlight-color: transparent;
+  }
+  .nav-overlay nav ul li a {
+    -webkit-tap-highlight-color: transparent;
+  }
+  /* × を三本線(1px)と同じ太さで SVG で描画 */
+  .nav-overlay-close::before,
+  .nav-overlay-close::after {
+    content: '';
+    position: absolute;
+    width: 26px;
+    height: 1px;
+    background: #e8e4dc;
+    display: block;
+  }
+  .nav-overlay-close::before { transform: rotate(45deg); }
+  .nav-overlay-close::after  { transform: rotate(-45deg); }
+  .nav-overlay nav { flex: 1; }
+  .nav-overlay nav ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+  }
+  .nav-overlay nav ul li a {
+    font-family: "garamond-premier-pro", serif;
+    font-size: 17px;
+    font-weight: 400;
+    letter-spacing: 6px;
+    color: #e8e4dc;
+    text-decoration: none;
+    text-transform: uppercase;
+    display: block;
+    padding: 18px 0;
+    border-bottom: 1px solid rgba(232,228,220,0.15);
+    transition: opacity 0.3s;
+  }
+  .nav-overlay nav ul li:first-child a {
+    border-top: 1px solid rgba(232,228,220,0.15);
+  }
+  .nav-overlay nav ul li a:hover { opacity: 0.5; }
+
+  /* ===== BACK TO TOP ===== */
+  .back-to-top {
+    position: fixed; bottom: 40px; right: 40px; z-index: 90;
+    width: 44px; height: 44px;
+    background: var(--bg-alt);
+    border: 1px solid var(--line);
+    color: var(--text-dim);
+    text-decoration: none;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.4s ease;
+    opacity: 0; visibility: hidden; transform: translateY(10px);
+  }
+  .back-to-top.show { opacity: 1; visibility: visible; transform: translateY(0); }
+  .back-to-top:hover {
+    background: var(--bg-card); border-color: var(--text);
+    color: var(--text); transform: translateY(-2px);
+  }
+  .back-to-top svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; }
+
+  /* ===== FOOTER (Pattern 5) ===== */
+  footer {
+    text-align:center; padding:40px;
+    font-family: "neue-haas-grotesk-display", sans-serif;
+    font-size: 14px; letter-spacing:4px;
+    font-size: 12px;
+    color: #e8e4dc; background: #5C5C5C;
+    border-top: none;
+  }
+
+  /* ===== RESPONSIVE 1230px ===== */
+  @media (max-width: 1230px) {
+    .hero .logo-hero {
+      position: relative;
+      right: auto;
+      top: auto;
+      transform: none;
+      margin-bottom: 60px;
+    }
+    .hero {
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+  }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 880px) {
+    .header-inner { height: 50px; padding: 0 20px; }
+    .header-nav { display: none; }
+    .hamburger { display: flex; }
+    .hero {
+      height: auto;
+      min-height: 100svh;
+      justify-content: flex-start;
+      padding: 110px 32px 100px;
+      overflow-x: hidden;
+      overflow-y: visible;
+    }
+    .hero .logo-hero {
+      margin-bottom: 40px;
+      font-size: 18px;
+    }
+    .hero h1 { font-size: 22px; letter-spacing: 5px; line-height: 2; margin-bottom: 32px; }
+    .hero-poem {
+      font-size: 13px;
+      letter-spacing: 2px;
+      max-width: 100%;
+      margin-top: 24px;
+    }
+    .brand-film-inner {
+      height: auto;
+      min-height: 100svh;
+      justify-content: center;
+      padding: 100px 32px;
+    }
+    .brand-film-text h2 { font-size: 18px; letter-spacing: 4px; }
+    .brand-film-text p { font-size: 13px; letter-spacing: 3px; }
+    .p5-section { padding: 100px 24px; }
+    .phil-header { grid-template-columns: 1fr; gap: 20px; }
+    .phil-grid { grid-template-columns: 1fr; gap: 48px 0; }
+    .works-grid { grid-template-columns: 1fr; }
+    .works-card { border-right: none !important; border-bottom: 1px solid var(--line); }
+    .works-card:last-child { border-bottom: none; }
+    .craft-grid { grid-template-columns: 1fr; }
+    .craft-cell { border-right: none !important; border-bottom: 1px solid var(--line); }
+    .craft-cell:last-child { border-bottom: none; }
+    .process-grid { grid-template-columns: 1fr; }
+    .process-cell { border-right: none !important; border-bottom: 1px solid var(--line) !important; }
+    .process-cell:last-child { border-bottom: none !important; }
+    .process-cell .connector { display: none; }
+    .news-header { grid-template-columns: 1fr; }
+    .news-header .news-date { border-right: none; border-bottom: 1px solid var(--line); padding: 16px 24px; }
+    .news-header .news-headline { padding: 20px 24px; font-size: 14px; }
+    .news-body-row { grid-template-columns: 1fr; }
+    .news-img-col { padding: 30px 24px; border-right: none; border-bottom: 1px solid var(--line); }
+    .news-table-col { padding: 30px 24px; }
+    .journal-grid { grid-template-columns: 1fr; }
+    .journal-card { border-right: none !important; border-bottom: 1px solid var(--line); }
+    .journal-card:last-child { border-bottom: none; }
+    .profile-top { grid-template-columns: 1fr; gap: 20px; }
+    .pf-row { grid-template-columns: 1fr; gap: 2px; }
+    #profile, #contact { padding: 100px 24px; }
+    .pf-members-grid { flex-direction: column; gap: 60px; }
+    .pf-lead { flex: none; padding-right: 0; border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 60px; }
+    .pf-team-group { flex-direction: column; gap: 40px; }
+    .pf-team-member { padding-left: 0; padding-right: 0; }
+    .pf-member-photo { max-width: 240px; margin-left: auto; margin-right: auto; }
+    .back-to-top { right: 20px; bottom: 20px; }
+    nav ul { gap: 20px; }
+  }
+
+  @media (max-width: 460px) {
+    .h1-p1 { display: block; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ========== HEADER (Numazu Club style) ========== -->
+<header class="site-header">
+  <div class="header-inner">
+
+    <nav class="header-nav">
+      <ul>
+        <li><a href="#top">Top</a></li>
+        <li><a href="#philosophy">Philosophy</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#craftsmanship">Craftsmanship</a></li>
+        <li><a href="#process">Process</a></li>
+        <li><a href="#news">News</a></li>
+        <li><a href="#journal">Journal</a></li>
+        <li><a href="#profile">Member</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+
+    <div class="hamburger">
+      <span></span>
+      <span></span>
+      <span></span>
+    </div>
+
+  </div>
+</header>
+
+<!-- ========== MOBILE NAV OVERLAY ========== -->
+<div class="nav-overlay" id="navOverlay">
+  <button class="nav-overlay-close" id="navClose"></button>
+  <nav>
+    <ul>
+      <li><a href="#top">Top</a></li>
+      <li><a href="#philosophy">Philosophy</a></li>
+      <li><a href="#works">Works</a></li>
+      <li><a href="#craftsmanship">Craftsmanship</a></li>
+      <li><a href="#process">Process</a></li>
+      <li><a href="#news">News</a></li>
+      <li><a href="#journal">Journal</a></li>
+      <li><a href="#profile">Member</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+</div>
+
+<!-- ========== 1. HERO ========== -->
+<section class="hero" id="top">
+  <div class="hero-slides">
+    <div class="hero-slide active" style="background-image: url('img/rikyu_green_t01.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('img/rikyu_autumn_t03.jpg')"></div>
+    <div class="hero-slide" style="background-image: url('img/rikyu_winter_t03.jpg')"></div>
+  </div>
+  <div class="logo-hero">Re<span class="logo-hyphen">｜</span>kyu<br>concept</div>
+  <h1><span class="h1-p1">伝統技術と洗練された</span><span class="h1-p2">美意識が</span><br>生み出す造形と空間</h1>
+  <div class="hero-poem">
+    「凛」とした中に そこはかとない懐かしさ。<br>
+    いつしか時を忘れ 望郷の彼方へと迷い込む。<br>
+    静寂に包まれ、私だけの佳趣を愉しむ。<br>
+    それが「Re-kyu concept」。<br><br>
+    何気ない日々の夕暮れ。<br>
+    黄金色の眩い光が奥まで差し込み、落ち葉を照らす。<br>
+    あたりの景色はこのひと時だけの色に染まる。<br>
+    ひと時を贅沢にする「Re-kyu 」にはその様な設えがある。
+  </div>
+</section>
+
+<!-- ========== SCROLL INTERLUDE ========== -->
+<div class="scroll-interlude">
+  <p class="scroll-interlude-label">Scroll</p>
+  <div class="scroll-line"></div>
+</div>
+
+<!-- ========== 2. BRAND FILM ========== -->
+<div class="brand-film">
+  <div class="brand-film-inner">
+    <canvas class="water-reflection" id="waterCanvas"></canvas>
+    <canvas class="ripple-canvas" id="rippleCanvas"></canvas>
+    <div class="brand-film-text">
+      <h2>伝統と革新が交差する<br>現代の離宮</h2>
+      <p>A short film — 90 sec</p>
+    </div>
+  </div>
+</div>
+
+<!-- ========== 3. PHILOSOPHY (Pattern 5) ========== -->
+<section id="philosophy" class="p5-section slide-in">
+  <p class="s-label">Philosophy</p>
+  <div class="phil-header">
+    <h2>モダン建築としての<br>離宮・数寄屋<br>プロダクト住宅への試み。</h2>
+    <div class="desc">
+      <span class="en">Modern Architecture as Rikyu and Sukiya</span>
+      古き離宮に見る日本の精神性と美意識を再認識すると共に、現代の「居」の在り方について再定義し、洗練された伝統技術と最新のテクノロジーを調和させ、古都・京都から発信する新しい時代の文化的空間を現代版の離宮として創造する。
+    </div>
+  </div>
+  <div class="phil-grid">
+    <div class="phil-cell slide-in">
+      <p class="num">01</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88941989/sign.png?v=1745236244756') center/cover no-repeat;color:transparent;">コンセプト</div>
+      <h3>コンセプト</h3>
+      <p>古き離宮に見る日本の精神性と美意識を再認識すると共に、現代の「居」の在り方について再定義し、洗練された伝統技術と最新のテクノロジーを調和させ、古都・京都から発信する新しい時代の文化的空間を現代版の離宮として創造する。</p>
+    </div>
+    <div class="phil-cell slide-in">
+      <p class="num">02</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88454639/img20250327213940027112.png?v=1745236244756') center/cover no-repeat;color:transparent;">技法</div>
+      <h3>技法と審美性</h3>
+      <p>木造建築の真髄とも言える大工の伝統技法は、長い歴史の中で培われ受け継がれた技術であり、その中でも木組みの技術はどこの国にもない繊細な加工技術。その技術は美しい構造体を生み出し、時の流れと共にその存在の美しさに深みを得る。与えられた機能の役目を果たそうとする姿に人は郷愁の感を抱きその美しさに感銘を得る。Re-kyuの審美性を表現するものである。</p>
+    </div>
+    <div class="phil-cell slide-in">
+      <p class="num">03</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88454646/img20250327213940027112.png?v=1745236244756') center/cover no-repeat;color:transparent;">伝承</div>
+      <h3>技術伝承の社会的・文化的意義</h3>
+      <p>伝統技術を次世代へ継承すると共に更に深化させ、新しい価値の創造を行う。大量生産ではない職人の手で作るものへの普遍的価値を認識し、その技術の文化的・社会的意義について、「Re-Kyu concept 」を通じて表現していく。内在される繊細な感覚を呼び起こし日本の美を広くに発信する。</p>
+    </div>
+    <div class="phil-cell slide-in">
+      <p class="num">04</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88941992/sign.png?v=1745236244756') center/cover no-repeat;color:transparent;">素材</div>
+      <h3>経年美化する素材・ノスタルジアな空間の演出</h3>
+      <p>銅は沈黙のまま歳月とともに酸化し深い陰影のある緑色に変わる。鉄は錆びて茶褐色へと変色する。それは劣化ではなく永遠に続く自然の摂理であり、時のつくる美のご褒美である。変化と共に時の記憶は刻まれ、見る人に郷愁の念を抱かせる。経年美化する素材には「聖なるもの」が宿り、人に語りかけようとしてくれる。</p>
+    </div>
+    <div class="phil-cell slide-in">
+      <p class="num">05</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88454686/img20250327214804416325.png?v=1745236244756') center/cover no-repeat;color:transparent;">機能</div>
+      <h3>居住空間の機能・スローテクノロジー</h3>
+      <p>日本の建築文化には優れた「スローテクノロジー」の技術がある。自然環境に順応した素材と技術である。また、造形においても古来から様式は環境に溶け込み普遍的な美しさを持っている。近年にみるライフスタイルの変化（働き方・生活スタイルの多様化）やテクノロジーの進化（スマートホーム技術の発展）は、それまで求められてきた住居の役割を大きく変えようとしている。古来からの技術や住文化もこれらの環境の変化に順応し、更なる深化が必要となっていく。</p>
+    </div>
+    <div class="phil-cell slide-in">
+      <p class="num">06</p>
+      <div class="img-area" style="background:url('https://re-kyu.jp/_src/88454686/img20250327214804416325.png?v=1745236244756') center/cover no-repeat;color:transparent;">茶室</div>
+      <h3>茶室の空間と時間の流れ</h3>
+      <p>「茶」は日本独自の美意識を表現するものであり、その一瞬に没頭し、また、そのひと時の儚さに美の根底を見出す。その為の空間は簡素であり、また不完全である。「詫び錆び」の精神が宿るタイムレスな空間「茶室」は、日本人の精神性を象徴するものである。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 4. WORKS (Pattern 5) ========== -->
+<section id="works" class="p5-section slide-in">
+  <p class="s-label">Works</p>
+  <div class="works-grid">
+    <div class="works-card">
+      <div class="img-area">Project 01</div>
+      <div class="card-body">
+        <h3>光と木が織りなす、静寂の邸宅</h3>
+        <div class="works-meta">
+          <span>京都市左京区</span><span>数寄屋モダン</span><span>280&#13217;</span>
+        </div>
+      </div>
+    </div>
+    <div class="works-card">
+      <div class="img-area">Project 02</div>
+      <div class="card-body">
+        <h3>時を重ねる、檜の住まい</h3>
+        <div class="works-meta">
+          <span>芦屋市</span><span>和モダン離宮</span><span>350&#13217;</span>
+        </div>
+      </div>
+    </div>
+    <div class="works-card">
+      <div class="img-area">Project 03</div>
+      <div class="card-body">
+        <h3>庭と一体になる、開かれた空間</h3>
+        <div class="works-meta">
+          <span>鎌倉市</span><span>離宮スタイル</span><span>310&#13217;</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="view-all">
+    <a href="#">View All Works &rarr;</a>
+  </div>
+</section>
+
+<!-- ========== 5. CRAFTSMANSHIP (Pattern 5) ========== -->
+<section id="craftsmanship" class="p5-section slide-in">
+  <p class="s-label">Craftsmanship</p>
+  <div class="craft-grid">
+    <div class="craft-cell slide-in">
+      <div class="icon-area">01</div>
+      <h3>厳選素材</h3>
+      <p>檜、杉、栗などの国産銘木。経年により深みを増す銅、鉄、漆喰、和紙。Re-kyuが選び抜く素材には、時とともに美しくなる力が宿っています。</p>
+    </div>
+    <div class="craft-cell slide-in">
+      <div class="icon-area">02</div>
+      <h3>匠の手仕事</h3>
+      <p>木組み、左官、建具。京都の職人ネットワークから厳選された匠たちが、一邸一邸に魂を込めます。大量生産では決して生まれない、手仕事の美。</p>
+    </div>
+    <div class="craft-cell slide-in">
+      <div class="icon-area">03</div>
+      <h3>伝統技法の継承</h3>
+      <p>追掛大栓継ぎ、渡り腮など、日本建築の真髄とも言える木組みの技術。数百年の歴史を持つ技法を現代に活かし、次世代へと継承します。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 6. PROCESS (Pattern 5) ========== -->
+<section id="process" class="p5-section slide-in">
+  <p class="s-label">Process</p>
+  <div class="process-grid">
+    <div class="process-cell slide-in">
+      <p class="step-num">01</p>
+      <h3>出会い</h3>
+      <p>哲学の共有、暮らしへの想いをヒアリング</p>
+      <span class="connector">&rarr;</span>
+    </div>
+    <div class="process-cell slide-in">
+      <p class="step-num">02</p>
+      <h3>構想</h3>
+      <p>高松伸による空間設計・コンセプト立案</p>
+      <span class="connector">&rarr;</span>
+    </div>
+    <div class="process-cell slide-in">
+      <p class="step-num">03</p>
+      <h3>素材選定</h3>
+      <p>京都の職人ネットワークから厳選</p>
+    </div>
+    <div class="process-cell slide-in">
+      <p class="step-num">04</p>
+      <h3>施工</h3>
+      <p>伝統技法による手仕事、一邸入魂の施工</p>
+      <span class="connector">&rarr;</span>
+    </div>
+    <div class="process-cell slide-in">
+      <p class="step-num">05</p>
+      <h3>竣工</h3>
+      <p>引き渡しと「経年美化」の始まり</p>
+      <span class="connector">&rarr;</span>
+    </div>
+    <div class="process-cell slide-in">
+      <p class="step-num">06</p>
+      <h3>共生</h3>
+      <p>アフターケア、経年の美を共に愉しむ</p>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 7. NEWS (re-kyu.jp style) ========== -->
+<section id="news" class="p5-section">
+  <p class="s-label">News</p>
+
+  <!-- 日付 + 見出し行 -->
+  <div class="news-header">
+    <div class="news-date">2026年3月</div>
+    <div class="news-headline">
+      KBS京都ラジオ「高松伸の建築物語Ⅲ」放送開始。<br>
+      2026年4月5日より　毎週 日曜日 18:00〜18:30　ON AIR !!
+    </div>
+  </div>
+
+  <!-- 写真（左）+ 放送スケジュール表（右） -->
+  <div class="news-body-row">
+    <div class="news-img-col">
+      <img src="img/radio.webp" alt="KBS京都ラジオ 高松伸の建築物語Ⅲ">
+    </div>
+    <div class="news-table-col">
+      <table class="schedule-table">
+        <thead>
+          <tr>
+            <th>&nbsp;</th>
+            <th>放送日</th>
+            <th>ゲスト</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>初 回</td><td>04月05日</td><td>高松　伸　フリートーク</td></tr>
+          <tr><td>第2回</td><td>04月12日</td><td>大迫弘和様<br><small>海城中学高等学校校長</small></td></tr>
+          <tr><td>第3回</td><td>04月19日</td><td>大迫弘和様<br><small>海城中学高等学校校長</small></td></tr>
+          <tr><td>第4回</td><td>04月26日</td><td>川原達也様<br><small>KAWAHARA KRAUSE ARCHITECTS主宰 / ドイツ・カッセル大学教授</small></td></tr>
+          <tr><td>第5回</td><td>05月03日</td><td>川原達也様<br><small>KAWAHARA KRAUSE ARCHITECTS主宰 / ドイツ・カッセル大学教授</small></td></tr>
+          <tr><td>第6回</td><td>05月10日</td><td>寺西俊輔様<br><small>㈱MIZEN 代表</small></td></tr>
+          <tr><td>第7回</td><td>05月17日</td><td>寺西俊輔様<br><small>㈱MIZEN 代表</small></td></tr>
+          <tr><td>第8回</td><td>05月24日</td><td>蘆田暢人様<br><small>㈱蘆田暢人建築設計事務所 代表</small></td></tr>
+          <tr><td>第9回</td><td>05月31日</td><td>吉川敏一様<br><small>京都府立医科大学名誉教授・元学長</small></td></tr>
+          <tr><td>第10回</td><td>06月07日</td><td>松下康士様<br><small>有限会社松下住建設計 代表</small></td></tr>
+          <tr><td>第11回</td><td>06月14日</td><td>黒崎敏様<br><small>㈱APOLLO一級建築士事務所 代表</small></td></tr>
+          <tr><td>第12回</td><td>06月21日</td><td>黒崎敏様<br><small>㈱APOLLO一級建築士事務所 代表</small></td></tr>
+          <tr><td>第13回</td><td>06月28日</td><td>梶原典男様<br><small>㈱トークリビング 代表</small></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ========== 8. JOURNAL (Pattern 5) ========== -->
+<section id="journal" class="p5-section">
+  <p class="s-label">Journal</p>
+  <div class="journal-grid">
+    <div class="journal-card">
+      <div class="img-area">Column</div>
+      <div class="card-body">
+        <span class="tag">建築コラム</span>
+        <h3>桂離宮に見る、日本建築の普遍性</h3>
+        <p class="date">2025.04</p>
+      </div>
+    </div>
+    <div class="journal-card">
+      <div class="img-area">Material</div>
+      <div class="card-body">
+        <span class="tag">素材探訪</span>
+        <h3>吉野杉の森を訪ねて</h3>
+        <p class="date">2025.05</p>
+      </div>
+    </div>
+    <div class="journal-card">
+      <div class="img-area">Radio</div>
+      <div class="card-body">
+        <span class="tag">ラジオ連動</span>
+        <h3>建築物語Ⅱ — 細尾真孝氏を迎えて</h3>
+        <p class="date">2025.04</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ========== IMAGE BREAK ========== -->
+<div class="image-break">
+  <img src="https://re-kyu.jp/_src/88454639/img20250327213940027112.png?v=1745236244756" alt="Re-kyu philosophy">
+</div>
+
+<!-- ========== 9. PROFILE (Pattern 5) ========== -->
+<section id="profile">
+  <div class="inner">
+    <p class="s-label">Member</p>
+
+    <!-- ===== Members horizontal layout ===== -->
+    <div class="pf-members-grid">
+
+      <!-- 高松 伸（Lead / 25% larger） -->
+      <div class="pf-lead">
+        <div class="pf-section-tag-area"><span class="pf-section-tag">Producer</span></div>
+        <div class="pf-member-photo">
+          <img src="https://re-kyu.jp/_src/88611818/img20250327220357649919.png?v=1745236244756" alt="高松 伸">
+        </div>
+        <p class="pf-member-name">高松　伸</p>
+        <p class="pf-member-role">Producer</p>
+        <div class="pf-row"><span class="l">称号・役職</span><span class="v">京都大学名誉教授　工学博士　建築家</span></div>
+        <div class="pf-row"><span class="l">出身</span><span class="v">島根県生まれ</span></div>
+        <div class="pf-row"><span class="l">海外会員</span><span class="v">アメリカ 建築家協会（AIA) 名誉会員 / ドイツ 建築家協会（BDA) 名誉会員 / 英国王立 建築家協会（RIBA) 会員</span></div>
+        <div class="pf-row"><span class="l">受賞歴</span><span class="v">芸術選奨文部大臣賞をはじめ国内外で多くの賞を受賞</span></div>
+      </div>
+
+      <!-- Team: 鈴木 哲也 ＋ 刀祢平 喬 -->
+      <div class="pf-team-group">
+        <div class="pf-team-member">
+          <div class="pf-section-tag-area"><span class="pf-section-tag">Team</span></div>
+          <div class="pf-member-photo">
+            <img src="https://re-kyu.jp/_src/88465673/img20250327221202357964.png?v=1745236244756" alt="鈴木 哲也">
+          </div>
+          <p class="pf-member-name">鈴木　哲也</p>
+          <p class="pf-member-role">General Manager</p>
+          <div class="pf-row"><span class="l">所属</span><span class="v">Re-kyu concept 事業推進室</span></div>
+          <div class="pf-row"><span class="l">学歴</span><span class="v">慶應義塾大学文学部 美学美術史学 美学学士 / 早稲田大学芸術学校建築学科卒</span></div>
+        </div>
+        <div class="pf-team-member">
+          <div class="pf-section-tag-area"><!-- spacer: no label --></div>
+          <div class="pf-member-photo">
+            <img src="https://re-kyu.jp/_src/88465671/img20250327221853232242.png?v=1745236244756" alt="刀祢平 喬">
+          </div>
+          <p class="pf-member-name">刀祢平　喬</p>
+          <p class="pf-member-role">Creative Director</p>
+          <div class="pf-row"><span class="l">所属</span><span class="v">Re-kyu concept 事業推進室</span></div>
+          <div class="pf-row"><span class="l">学歴</span><span class="v">東京造形大学デザイン学部 視覚伝達デザイン学科 造形学士</span></div>
+        </div>
+      </div>
+
+    </div><!-- /pf-members-grid -->
+
+    <!-- Company -->
+    <div class="pf-group">
+      <h3>Company</h3>
+      <div class="pf-row"><span class="l">設計事務所</span><span class="v">株式会社高松伸建築設計事務所（〒612-8445 京都府京都市伏見区竹田浄菩提院町195）</span></div>
+      <div class="pf-row"><span class="l">施工パートナー</span><span class="v">株式会社プリンシパルホーム（〒194-0012 東京都町田市金森３丁目－23－11）</span></div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ========== 10. CONTACT (Pattern 5) ========== -->
+<section id="contact">
+  <p class="s-label">Contact</p>
+  <div class="contact-address">
+    OFFICE　高松伸建築設計事務所　事業推進室
+  </div>
+  <div class="contact-map">
+    <img src="img/re-kyu_map_text.jpg" alt="高松伸建築設計事務所 地図">
+  </div>
+  <p class="contact-map-address">〒612-8445 京都府京都市伏見区竹田浄菩提院町195</p>
+  <div class="contact-person">
+    <p>E-mail　<a href="mailto:suzuki.tetsuya@re-kyu.jp">suzuki.tetsuya@re-kyu.jp</a></p>
+  </div>
+</section>
+
+<!-- ========== FOOTER ========== -->
+<footer>&copy; Re-kyu concept 2025. ALL RIGHTS RESERVED</footer>
+
+<!-- ========== BACK TO TOP ========== -->
+<a href="#" class="back-to-top" aria-label="TOPへ戻る">
+  <svg viewBox="0 0 24 24"><polyline points="18 15 12 9 6 15"/></svg>
+</a>
+
+<!-- ========== SCRIPTS ========== -->
+<script>
+  // Fade-in on scroll (hero/brand-film)
+  const fadeObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1, rootMargin: '0px 0px -60px 0px' });
+  document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
+
+  // Slide-in on scroll (pattern 5 sections)
+  const slideObserver = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('active'); });
+  }, { threshold: 0.06 });
+  document.querySelectorAll('.slide-in').forEach(el => slideObserver.observe(el));
+
+  // Water reflection + Ripple animation
+  const rippleCanvas = document.getElementById('rippleCanvas');
+  const waterCanvas = document.getElementById('waterCanvas');
+  if (rippleCanvas && waterCanvas) {
+    const rCtx = rippleCanvas.getContext('2d');
+    const wCtx = waterCanvas.getContext('2d');
+    const img = new Image();
+    img.src = 'img/rikyu_winter_t03.jpg';
+
+    const lineImg = new Image();
+    lineImg.src = 'img/rikyu_winter_t03_LINE.png';
+    let lineImgLoaded = false;
+    lineImg.onload = () => { lineImgLoaded = true; };
+
+    let ripple = null;
+    let imgLoaded = false;
+    img.onload = () => { imgLoaded = true; };
+
+    function resizeCanvases() {
+      rippleCanvas.width  = rippleCanvas.offsetWidth;
+      rippleCanvas.height = rippleCanvas.offsetHeight;
+      waterCanvas.width   = waterCanvas.offsetWidth;
+      waterCanvas.height  = waterCanvas.offsetHeight;
+    }
+    resizeCanvases();
+    window.addEventListener('resize', resizeCanvases);
+
+    const filmTextEl  = document.querySelector('.brand-film-text');
+    const filmTextH2  = document.querySelector('.brand-film-text h2');
+    const filmTextP   = document.querySelector('.brand-film-text p');
+
+    // Trigger ripple when the text center reaches 50% of the viewport (scroll-based)
+    let rippleTriggered = false;
+    function checkRippleTrigger() {
+      if (rippleTriggered || !filmTextEl) return;
+      const rect = filmTextEl.getBoundingClientRect();
+      const textCenter = rect.top + rect.height / 2;
+      if (textCenter <= window.innerHeight * 0.65) {
+        const cx = rippleCanvas.width / 2;
+        const cy = rippleCanvas.height / 2;
+        const maxR = Math.max(rippleCanvas.width, rippleCanvas.height) * 0.85;
+        ripple = { x: cx, y: cy, r: 0, maxR };
+        rippleTriggered = true;
+        window.removeEventListener('scroll', checkRippleTrigger);
+      }
+    }
+    window.addEventListener('scroll', checkRippleTrigger, { passive: true });
+
+    function drawWaterReflection(progress, tE) {
+      if (!imgLoaded) return;
+      const W = waterCanvas.width;
+      const H = waterCanvas.height;
+      wCtx.clearRect(0, 0, W, H);
+
+      const iw = img.naturalWidth, ih = img.naturalHeight;
+      const scale = Math.max(W / iw, H / ih);
+      const dw = iw * scale, dh = ih * scale;
+      const dx = (W - dw) / 2, dy = (H - dh) / 2;
+
+      // tE に合わせて元写真フェードアウト（クロスフェードと同期）
+      wCtx.globalAlpha = 0.3 * (1 - tE);
+      wCtx.drawImage(img, dx, dy, dw, dh);
+      wCtx.globalAlpha = 1;
+
+      const gradTop = wCtx.createLinearGradient(0, 0, 0, H * 0.6);
+      gradTop.addColorStop(0, 'rgba(10,10,10,1)');
+      gradTop.addColorStop(1, 'rgba(10,10,10,0)');
+      wCtx.fillStyle = gradTop;
+      wCtx.fillRect(0, 0, W, H * 0.6);
+    }
+
+    function animate() {
+      const W = rippleCanvas.width;
+      const H = rippleCanvas.height;
+      rCtx.clearRect(0, 0, W, H);
+      let progress = 0;
+      let e = 0;
+      let tE = 0;
+
+      if (ripple) {
+        ripple.r += 4.0;
+        progress = Math.min(ripple.r / ripple.maxR, 1);
+        e = progress * progress * (3 - 2 * progress); // smoothstep
+
+        // tE: e=0.45 以降に正規化 — 文字・クロスフェード全て同タイミング
+        tE = Math.max(0, (e - 0.45) / 0.55);
+
+        // ── 1. 色の広がり: 中心から外側へ ベージュが水面のように広がる ──
+        const solidR = ripple.r * 0.80;
+        const fadeR  = ripple.r * 1.10;
+        const revGrad = rCtx.createRadialGradient(
+          ripple.x, ripple.y, Math.max(0.1, solidR),
+          ripple.x, ripple.y, Math.max(1,   fadeR)
+        );
+        revGrad.addColorStop(0, `rgba(227,223,217,${e})`);
+        revGrad.addColorStop(1, `rgba(227,223,217,0)`);
+        rCtx.fillStyle = revGrad;
+        rCtx.fillRect(0, 0, W, H);
+
+        // ── 2. LINE画像クロスフェード: 文字色変化と完全同期 ──
+        if (lineImgLoaded && tE > 0) {
+          const liw = lineImg.naturalWidth, lih = lineImg.naturalHeight;
+          const ls  = Math.max(W / liw, H / lih);
+          const ldw = liw * ls, ldh = lih * ls;
+          const ldx = (W - ldw) / 2, ldy = (H - ldh) / 2;
+          rCtx.globalAlpha = 0.50 * tE;
+          rCtx.drawImage(lineImg, ldx, ldy, ldw, ldh);
+          rCtx.globalAlpha = 1;
+        }
+
+        // ── 3. 波紋リング (ゴールド→チャコールへ背景に合わせて変化) ──
+        const rr = Math.round(184 + (60  - 184) * e);
+        const rg = Math.round(160 + (60  - 160) * e);
+        const rb = Math.round(106 + (60  - 106) * e);
+
+        const alpha = 0.55 * (1 - progress);
+        if (alpha > 0) {
+          rCtx.beginPath();
+          rCtx.arc(ripple.x, ripple.y, ripple.r, 0, Math.PI * 2);
+          rCtx.strokeStyle = `rgba(${rr},${rg},${rb},${alpha})`;
+          rCtx.lineWidth = 1.2;
+          rCtx.stroke();
+        }
+        if (ripple.r > 60) {
+          const r2 = ripple.r - 60;
+          const a2 = 0.3 * (1 - r2 / ripple.maxR);
+          if (a2 > 0) {
+            rCtx.beginPath();
+            rCtx.arc(ripple.x, ripple.y, r2, 0, Math.PI * 2);
+            rCtx.strokeStyle = `rgba(${rr},${rg},${rb},${a2})`;
+            rCtx.lineWidth = 0.8;
+            rCtx.stroke();
+          }
+        }
+
+        // ── 4. 文字色: 同じ変化幅(白→#3C3C3C)で完全に視覚同期 ──
+        const cr = Math.round(232 + (60 - 232) * tE);
+        const cg = Math.round(228 + (60 - 228) * tE);
+        const cb = Math.round(220 + (60 - 220) * tE);
+        if (filmTextH2) filmTextH2.style.color = `rgb(${cr},${cg},${cb})`;
+        if (filmTextP)  filmTextP.style.color  = `rgb(${cr},${cg},${cb})`;
+      }
+
+      drawWaterReflection(progress, tE);
+      requestAnimationFrame(animate);
+    }
+    animate();
+  }
+
+  // Hero slideshow
+  const slides = document.querySelectorAll('.hero-slide');
+  let current = 0;
+  setInterval(() => {
+    slides[current].classList.remove('active');
+    current = (current + 1) % slides.length;
+    slides[current].classList.add('active');
+  }, 4000);
+
+  // Mobile nav overlay
+  const hamburger = document.querySelector('.hamburger');
+  const navOverlay = document.getElementById('navOverlay');
+  const navClose = document.getElementById('navClose');
+
+  hamburger.addEventListener('click', () => {
+    navOverlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  });
+  navClose.addEventListener('click', () => {
+    navOverlay.classList.remove('open');
+    document.body.style.overflow = '';
+  });
+  navOverlay.querySelectorAll('a').forEach(link => {
+    link.addEventListener('click', () => {
+      navOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    });
+  });
+
+  // Header: hidden initially, slides in after scroll (Numazu Club style)
+  const siteHeader = document.querySelector('.site-header');
+  const backToTop = document.querySelector('.back-to-top');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 60) {
+      siteHeader.classList.add('nv-show');
+    } else {
+      siteHeader.classList.remove('nv-show');
+    }
+    backToTop.classList.toggle('show', window.scrollY > 400);
+  });
+</script>
+
+</body>
+</html>
