@@ -260,12 +260,11 @@
     writing-mode: vertical-rl;
     text-orientation: upright;
     text-align: start;
-    font-family: "garamond-premier-pro", serif;
+    font-family: "Shippori Mincho", serif;
     font-size: 20px;
     letter-spacing: 7px;
     line-height: 2.2;
     color: var(--gold-dim);
-    text-transform: uppercase;
     pointer-events: none;
   }
   .hero h1 {
@@ -488,10 +487,14 @@
   }
   .phil-grid {
     display: grid; grid-template-columns: 1fr 1fr 1fr;
-    gap: 80px 48px;
+    gap: 0;
+    border-top: 1px solid var(--line);
+    border-left: 1px solid var(--line);
   }
   .phil-cell {
-    padding: 0;
+    padding: 36px 32px 44px;
+    border-right: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
     transition: opacity 0.4s;
     position: relative;
     background: transparent;
@@ -499,11 +502,11 @@
   .phil-cell:hover { opacity: 0.85; }
   .phil-cell .num {
     font-family: "garamond-premier-pro", serif;
-    font-size: 24px; font-style: italic;
-    color: var(--text-light); margin-bottom: 20px;
+    font-size: 22px; font-style: italic;
+    color: var(--text-light); margin-bottom: 24px;
   }
   .phil-cell .img-area {
-    width: 100%; height: 280px;
+    width: 100%; height: auto; aspect-ratio: 8 / 4;
     background: var(--bg-card);
     display: flex; align-items: center; justify-content: center;
     color: var(--text-dim); font-size: 14px; letter-spacing: 2px;
@@ -827,15 +830,15 @@
     gap: 0;
     margin-bottom: 60px;
   }
-  /* Lead: 高松伸 — 25% wider than each team member */
+  /* Lead: 高松伸 — 左側メイン */
   .pf-lead {
-    flex: 1.25;
-    padding-right: 56px;
+    flex: 1.1;
+    padding-right: 64px;
     position: relative;
     display: flex;
     flex-direction: column;
   }
-  /* Vertical divider — starts at top of section tag area */
+  /* Vertical divider */
   .pf-lead::after {
     content: '';
     position: absolute;
@@ -845,33 +848,74 @@
     width: 1px;
     background: var(--line);
   }
-  /* Team: 鈴木+刀祢平 side by side */
+  /* Team: 鈴木(上) + 刀祢平(下) — 縦積み */
   .pf-team-group {
-    flex: 2;
+    flex: 1;
     display: flex;
-    gap: 0;
+    flex-direction: column;
+    gap: 52px;
   }
   .pf-team-member {
-    flex: 1;
-    padding-left: 48px;
-    padding-right: 24px;
+    flex: none;
+    padding-left: 56px;
+    padding-right: 0;
     display: flex;
     flex-direction: column;
   }
-  .pf-team-member:last-child { padding-right: 0; }
+
+  /* 写真左・テキスト右 の横並び行 */
+  .pf-member-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 28px;
+  }
+  .pf-member-info {
+    flex: 1;
+    min-width: 0;
+  }
+  /* pf-row ラベル列をコンパクトに */
+  .pf-member-info .pf-row {
+    grid-template-columns: 90px 1fr;
+  }
 
   /* Photo containers */
   .pf-member-photo {
-    width: 100%;
-    aspect-ratio: 2 / 3;
+    flex-shrink: 0;
     background: var(--bg-card);
     border: 1px solid var(--line);
     overflow: hidden;
-    margin-bottom: 28px;
-    flex-shrink: 0;
+    margin-bottom: 0;
     position: relative;
   }
+  /* 高松伸：縦長ポートレート・大きめ (210 × 1.15 ≈ 242px) */
+  .pf-lead .pf-member-photo {
+    width: 242px;
+    aspect-ratio: 2 / 3;
+  }
+  /* チームメンバー：縦長ポートレート・小さめ (150 × 0.85 ≈ 128px) */
+  .pf-team-member .pf-member-photo {
+    width: 128px;
+    aspect-ratio: 2 / 3;
+  }
   .pf-member-photo img { width: 100%; height: 100%; object-fit: cover; display: block; }
+
+  /* 名前・役職の上マージン調整（写真右隣に来るため） */
+  .pf-member-info .pf-member-name { margin-bottom: 4px; }
+  .pf-member-info .pf-member-role { margin-bottom: 20px; }
+
+  /* ラベルなし説明文（区切り線なし） */
+  .pf-desc {
+    font-family: "Shippori Mincho", serif;
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--text-mid);
+    letter-spacing: 0.5px;
+    margin-top: 0.35em;
+  }
+  /* グループ間の空白（1行分） */
+  .pf-desc--gap {
+    margin-top: 1.6em;
+  }
 
   /* Photo section labels (PRODUCER / TEAM) — above photos */
   .pf-section-tag-area {
@@ -897,10 +941,10 @@
     margin-bottom: 6px;
   }
   .pf-member-role {
-    font-family: "neue-haas-grotesk-display", sans-serif;
-    font-size: 14px; letter-spacing: 3px;
-    color: var(--text-dim); text-transform: uppercase;
-    margin-bottom: 24px;
+    font-family: "Shippori Mincho", serif;
+    font-size: 13px; letter-spacing: 1px;
+    color: var(--text-dim);
+    margin-bottom: 16px;
   }
 
   /* ===== CONTACT (Pattern 5) ===== */
@@ -1095,7 +1139,8 @@
     .brand-film-text p { font-size: 13px; letter-spacing: 3px; }
     .p5-section { padding: 100px 24px; }
     .phil-header { grid-template-columns: 1fr; gap: 20px; }
-    .phil-grid { grid-template-columns: 1fr; gap: 48px 0; }
+    .phil-grid { grid-template-columns: 1fr; }
+    .phil-cell { padding: 24px 20px 32px; }
     .works-grid { grid-template-columns: 1fr; }
     .works-card { border-right: none !important; border-bottom: 1px solid var(--line); }
     .works-card:last-child { border-bottom: none; }
@@ -1120,9 +1165,12 @@
     #profile, #contact { padding: 100px 24px; }
     .pf-members-grid { flex-direction: column; gap: 60px; }
     .pf-lead { flex: none; padding-right: 0; border-right: none; border-bottom: 1px solid var(--line); padding-bottom: 60px; }
+    .pf-lead::after { display: none; }
     .pf-team-group { flex-direction: column; gap: 40px; }
     .pf-team-member { padding-left: 0; padding-right: 0; }
-    .pf-member-photo { max-width: 240px; margin-left: auto; margin-right: auto; }
+    .pf-member-row { flex-direction: column; gap: 20px; }
+    .pf-lead .pf-member-photo { width: 100%; max-width: 242px; aspect-ratio: 2/3; margin-left: auto; margin-right: auto; }
+    .pf-team-member .pf-member-photo { width: 100%; max-width: 160px; aspect-ratio: 2/3; margin-left: auto; margin-right: auto; }
     .back-to-top { right: 20px; bottom: 20px; }
     nav ul { gap: 20px; }
   }
@@ -1186,7 +1234,7 @@
     <div class="hero-slide" style="background-image: url('img/rikyu_autumn_t03.jpg')"></div>
     <div class="hero-slide" style="background-image: url('img/rikyu_winter_t03.jpg')"></div>
   </div>
-  <div class="logo-hero">Re<span class="logo-hyphen">｜</span>kyu<br>concept</div>
+  <div class="logo-hero">高松伸<br>建築設計事務所</div>
   <h1><span class="h1-p1">伝統技術と洗練された</span><span class="h1-p2">美意識が</span><br>生み出す造形と空間</h1>
   <div class="hero-poem">
     「凛」とした中に そこはかとない懐かしさ。<br>
@@ -1459,41 +1507,56 @@
     <!-- ===== Members horizontal layout ===== -->
     <div class="pf-members-grid">
 
-      <!-- 高松 伸（Lead / 25% larger） -->
+      <!-- 高松 伸（Lead / Producer） -->
       <div class="pf-lead">
         <div class="pf-section-tag-area"><span class="pf-section-tag">Producer</span></div>
-        <div class="pf-member-photo">
-          <img src="https://re-kyu.jp/_src/88611818/img20250327220357649919.png?v=1745236244756" alt="高松 伸">
+        <div class="pf-member-row">
+          <div class="pf-member-photo">
+            <img src="https://re-kyu.jp/_src/88611818/img20250327220357649919.png?v=1745236244756" alt="高松 伸">
+          </div>
+          <div class="pf-member-info">
+            <p class="pf-member-name">高松　伸</p>
+            <p class="pf-member-role">（株式会社高松伸建築設計事務所主宰）</p>
+            <p class="pf-desc">島根県生まれ</p>
+            <p class="pf-desc">京都大学工学部建築学科卒</p>
+            <p class="pf-desc">同大学大学院博士課程修了</p>
+            <p class="pf-desc">京都大学名誉教授　工学博士</p>
+            <p class="pf-desc pf-desc--gap">アメリカ建築家協会（AIA) 名誉会員</p>
+            <p class="pf-desc">ドイツ建築家協会（BDA) 名誉会員</p>
+            <p class="pf-desc">英国王立建築家協会（RIBA) 会員</p>
+            <p class="pf-desc pf-desc--gap">芸術選奨文部大臣賞をはじめ国内外で多くの賞を受賞</p>
+          </div>
         </div>
-        <p class="pf-member-name">高松　伸</p>
-        <p class="pf-member-role">Producer</p>
-        <div class="pf-row"><span class="l">称号・役職</span><span class="v">京都大学名誉教授　工学博士　建築家</span></div>
-        <div class="pf-row"><span class="l">出身</span><span class="v">島根県生まれ</span></div>
-        <div class="pf-row"><span class="l">海外会員</span><span class="v">アメリカ 建築家協会（AIA) 名誉会員 / ドイツ 建築家協会（BDA) 名誉会員 / 英国王立 建築家協会（RIBA) 会員</span></div>
-        <div class="pf-row"><span class="l">受賞歴</span><span class="v">芸術選奨文部大臣賞をはじめ国内外で多くの賞を受賞</span></div>
       </div>
 
       <!-- Team: 鈴木 哲也 ＋ 刀祢平 喬 -->
       <div class="pf-team-group">
         <div class="pf-team-member">
           <div class="pf-section-tag-area"><span class="pf-section-tag">Team</span></div>
-          <div class="pf-member-photo">
-            <img src="https://re-kyu.jp/_src/88465673/img20250327221202357964.png?v=1745236244756" alt="鈴木 哲也">
+          <div class="pf-member-row">
+            <div class="pf-member-photo">
+              <img src="img/suzuki.png" alt="鈴木 哲也" style="object-position: calc(50% + 10px) center;">
+            </div>
+            <div class="pf-member-info">
+              <p class="pf-member-name">鈴木　哲也</p>
+              <p class="pf-member-role">（Re-kyu concept 事業推進室 室長）</p>
+              <p class="pf-desc">慶應義塾大学文学部美学美術史学美学学士</p>
+              <p class="pf-desc">早稲田大学芸術学校建築科卒</p>
+            </div>
           </div>
-          <p class="pf-member-name">鈴木　哲也</p>
-          <p class="pf-member-role">General Manager</p>
-          <div class="pf-row"><span class="l">所属</span><span class="v">Re-kyu concept 事業推進室</span></div>
-          <div class="pf-row"><span class="l">学歴</span><span class="v">慶應義塾大学文学部 美学美術史学 美学学士 / 早稲田大学芸術学校建築学科卒</span></div>
         </div>
         <div class="pf-team-member">
           <div class="pf-section-tag-area"><!-- spacer: no label --></div>
-          <div class="pf-member-photo">
-            <img src="https://re-kyu.jp/_src/88465671/img20250327221853232242.png?v=1745236244756" alt="刀祢平 喬">
+          <div class="pf-member-row">
+            <div class="pf-member-photo">
+              <img src="img/tonehira.png" alt="刀祢平 喬">
+            </div>
+            <div class="pf-member-info">
+              <p class="pf-member-name">刀祢平　喬</p>
+              <p class="pf-member-role">（Re-kyu concept 事業推進室）</p>
+              <p class="pf-desc">東京造形大学デザイン学部 視覚伝達デザイン学科 造形学士</p>
+            </div>
           </div>
-          <p class="pf-member-name">刀祢平　喬</p>
-          <p class="pf-member-role">Creative Director</p>
-          <div class="pf-row"><span class="l">所属</span><span class="v">Re-kyu concept 事業推進室</span></div>
-          <div class="pf-row"><span class="l">学歴</span><span class="v">東京造形大学デザイン学部 視覚伝達デザイン学科 造形学士</span></div>
         </div>
       </div>
 
