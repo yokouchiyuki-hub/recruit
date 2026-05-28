@@ -1091,13 +1091,6 @@
 
   /* ===== RESPONSIVE 1230px ===== */
   @media (max-width: 1230px) {
-    .hero .logo-hero {
-      position: relative;
-      right: auto;
-      top: auto;
-      transform: none;
-      margin-bottom: 60px;
-    }
     .hero {
       flex-direction: column;
       justify-content: center;
@@ -1111,23 +1104,21 @@
     .header-nav { display: none; }
     .hamburger { display: flex; }
     .hero {
-      height: auto;
+      height: 100svh;
       min-height: 100svh;
-      justify-content: flex-start;
-      padding: 110px 32px 100px;
+      justify-content: center;
+      align-items: center;
+      padding: 80px 32px;
       overflow-x: hidden;
       overflow-y: visible;
     }
-    .hero .logo-hero {
-      margin-bottom: 40px;
-      font-size: 18px;
-    }
-    .hero h1 { font-size: 22px; letter-spacing: 5px; line-height: 2; margin-bottom: 32px; }
+    .hero h1 { font-size: 22px; letter-spacing: 5px; line-height: 2; margin-bottom: 32px; text-align: center; }
     .hero-poem {
-      font-size: 13px;
+      font-size: 14px;
       letter-spacing: 2px;
       max-width: 100%;
       margin-top: 24px;
+      text-align: center;
     }
     .brand-film-inner {
       height: auto;
@@ -1234,7 +1225,6 @@
     <div class="hero-slide" style="background-image: url('img/rikyu_autumn_t03.jpg')"></div>
     <div class="hero-slide" style="background-image: url('img/rikyu_winter_t03.jpg')"></div>
   </div>
-  <div class="logo-hero">高松伸<br>建築設計事務所</div>
   <h1><span class="h1-p1">伝統技術と洗練された</span><span class="h1-p2">美意識が</span><br>生み出す造形と空間</h1>
   <div class="hero-poem">
     「凛」とした中に そこはかとない懐かしさ。<br>
@@ -1512,7 +1502,7 @@
         <div class="pf-section-tag-area"><span class="pf-section-tag">Producer</span></div>
         <div class="pf-member-row">
           <div class="pf-member-photo">
-            <img src="https://re-kyu.jp/_src/88611818/img20250327220357649919.png?v=1745236244756" alt="高松 伸">
+            <img src="img/takamatu.jpg" alt="高松 伸">
           </div>
           <div class="pf-member-info">
             <p class="pf-member-name">高松　伸</p>
@@ -1532,10 +1522,10 @@
       <!-- Team: 鈴木 哲也 ＋ 刀祢平 喬 -->
       <div class="pf-team-group">
         <div class="pf-team-member">
-          <div class="pf-section-tag-area"><span class="pf-section-tag">Team</span></div>
+          <div class="pf-section-tag-area"></div>
           <div class="pf-member-row">
             <div class="pf-member-photo">
-              <img src="img/suzuki.png" alt="鈴木 哲也" style="object-position: calc(50% + 10px) center;">
+              <img src="img/suzuki.jpg" alt="鈴木 哲也" style="object-position: calc(50% + 8px) center;">
             </div>
             <div class="pf-member-info">
               <p class="pf-member-name">鈴木　哲也</p>
@@ -1549,7 +1539,7 @@
           <div class="pf-section-tag-area"><!-- spacer: no label --></div>
           <div class="pf-member-row">
             <div class="pf-member-photo">
-              <img src="img/tonehira.png" alt="刀祢平 喬">
+              <img src="img/tonehira.jpg" alt="刀祢平 喬">
             </div>
             <div class="pf-member-info">
               <p class="pf-member-name">刀祢平　喬</p>
