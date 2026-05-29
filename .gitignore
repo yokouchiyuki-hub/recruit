@@ -1,0 +1,8 @@
+.DS_Store
+.claude/
+バックアップ用/
+作業ログ_*.md
+numbers_backup.html
+serve.py
+server.rb
+component-library/
