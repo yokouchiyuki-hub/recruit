@@ -19,6 +19,10 @@
   --cream-50:#FDFAF6;--cream-100:#F7F3ED;
   --font-jp:'Noto Sans JP','Hiragino Kaku Gothic ProN',Meiryo,sans-serif;
   --font-en:'Josefin Sans',sans-serif;
+  --cream-200:#EFE9E0;
+  --r-sm:8px;--r-lg:24px;--r-pill:100px;
+  --shadow-sky:0 4px 18px rgba(107,189,232,.3);
+  --trans:all .25s ease;
 }
 html{scroll-behavior:smooth}
 body{font-family:var(--font-jp);background:var(--white);color:var(--ink);line-height:1.8;font-size:16px;overflow-x:hidden}
@@ -124,6 +128,8 @@ a{text-decoration:none;color:inherit}
 
 /* ─── SECTION BASE ───────────────────────────── */
 .sec{padding:100px 40px}
+@media(max-width:1024px){.sec{padding:80px 32px}}
+@media(max-width:768px){.sec{padding:64px 24px}}
 .sec-in{max-width:1160px;margin:0 auto}
 .sec-label{
   font-family:var(--font-en);font-size:14px;letter-spacing:.25em;
@@ -590,12 +596,63 @@ a{text-decoration:none;color:inherit}
   .env-card:first-child .env-img{aspect-ratio:4/3}
 }
 @media(max-width:600px){
-  .sec{padding:72px 20px}
+  .sec{padding:56px 20px}
   .site-header{padding:0 20px}
   .values-grid{grid-template-columns:1fr}
   .team-grid{grid-template-columns:1fr}
   .hero-inner{padding:120px 24px 80px}
 }
+
+/* ─── HAMBURGER (TOPページと共通) ─────────────── */
+.nav-burger{
+  display:none;
+  width:44px;height:44px;
+  background:#4ea8d8;border:none;border-radius:8px;
+  align-items:center;justify-content:center;cursor:pointer;flex-shrink:0;
+  transition:background .2s;
+}
+.nav-burger:hover{background:var(--sky-500)}
+.nav-burger.open{background:var(--sky-500)}
+.nav-burger.open .burger-ham{display:none!important}
+.nav-burger.open .burger-close{display:block!important}
+.nav-drawer{
+  position:fixed;top:0;left:0;right:0;bottom:0;z-index:300;
+  background:var(--white);
+  transform:translateX(100%);
+  transition:transform .35s ease;
+  overflow-y:auto;
+}
+.nav-drawer.open{transform:translateX(0)}
+.nav-drawer-header{
+  height:64px;display:flex;align-items:center;justify-content:space-between;
+  padding:0 20px;border-bottom:1.5px solid var(--cream-200);
+}
+.nav-logo{display:flex;align-items:center;flex-shrink:0;cursor:pointer}
+.nav-logo img{height:20px;width:auto;display:block}
+.nav-logo-recruit{
+  font-family:var(--font-en);font-size:15px;font-weight:700;letter-spacing:.2em;
+  text-transform:uppercase;line-height:1;display:inline-block;
+  color:var(--sky-400);margin-left:15px;padding-top:10px;
+}
+.nav-drawer-links{list-style:none}
+.nav-drawer-links li a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:16px 20px;font-size:16px;font-weight:500;color:var(--ink-2);
+  border-bottom:1px solid var(--cream-200);
+}
+.nav-drawer-links li a:active{background:var(--sky-50)}
+.nav-drawer-cta{padding:20px 16px 32px;background:var(--sky-50);border-top:1px solid var(--sky-100)}
+.nav-drawer-cta a{
+  display:flex;align-items:center;justify-content:center;gap:8px;
+  background:var(--sky-300);color:white;font-size:16px;font-weight:700;
+  padding:16px;border-radius:var(--r-lg);line-height:1;
+  box-shadow:var(--shadow-sky);
+}
+@media(max-width:900px){
+  .header-nav{display:none}
+  .nav-burger{display:flex}
+}
+@media(max-width:375px){.sec{padding:48px 16px}}
 </style>
 </head>
 <body>
@@ -604,15 +661,52 @@ a{text-decoration:none;color:inherit}
 <header class="site-header">
   <div class="header-logo">Principal<span>Home</span></div>
   <nav class="header-nav">
-    <a href="recruit_2.html">採用TOP</a>
-    <a href="recruit_2.html#data">数字で見る</a>
-    <a href="recruit_2.html#jobs">募集要項</a>
-    <a class="btn-back" href="recruit_2.html">
+    <a href="index.html">採用TOP</a>
+    <a href="index.html#data">数字で見る</a>
+    <a href="index.html#requirement">募集要項</a>
+    <a class="btn-back" href="index.html">
       <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M8.5 2.5L4 7l4.5 4.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       戻る
     </a>
   </nav>
+    <button class="nav-burger" id="navBurger" aria-label="メニュー">
+      <svg class="burger-ham" viewBox="0 0 20 14" xmlns="http://www.w3.org/2000/svg" style="width:20px;height:14px;display:block;transition:opacity .2s,transform .2s">
+        <rect x="0" y="0" width="20" height="2" rx="1" fill="white"/>
+        <rect x="0" y="6" width="20" height="2" rx="1" fill="white"/>
+        <rect x="0" y="12" width="20" height="2" rx="1" fill="white"/>
+      </svg>
+      <svg class="burger-close" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:18px;height:18px;display:none;transition:opacity .2s,transform .2s">
+        <line x1="2" y1="2" x2="14" y2="14" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+        <line x1="14" y1="2" x2="2" y2="14" stroke="white" stroke-width="2.2" stroke-linecap="round"/>
+      </svg>
+    </button>
 </header>
+
+<!-- ══ DRAWER (TOPページと共通) ══ -->
+<div class="nav-drawer" id="navDrawer">
+  <div class="nav-drawer-header">
+    <a href="index.html" class="nav-logo"><img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyBpZD0iX+ODrOOCpOODpOODvF8yIiBkYXRhLW5hbWU9IuODrOOCpOODpOODvCAyIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTEuNDEgNDcuOTUiPgogIDxkZWZzPgogICAgPHN0eWxlPgogICAgICAuY2xzLTEgewogICAgICAgIGZpbGw6ICMxYTMxNjg7CiAgICAgIH0KCiAgICAgIC5jbHMtMiB7CiAgICAgICAgZmlsbDogIzAwYjhlZTsKICAgICAgfQoKICAgICAgLmNscy0zIHsKICAgICAgICBmaWxsOiAjMDA0ZGExOwogICAgICB9CiAgICA8L3N0eWxlPgogIDwvZGVmcz4KICA8ZyBpZD0iX+ODrOOCpOODpOODvF8yLTIiIGRhdGEtbmFtZT0i44Os44Kk44Ok44O8IDIiPgogICAgPGc+CiAgICAgIDxnPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMyIgZD0iTTIwLjk2LDI3LjE2YzkuMjUsMTQuNjUsMjEuMjEtMTcuMjcsMjEuMjEtOS4wMywwLDE2LjI1LTEzLjE3LDI5LjQyLTI5LjQyLDI5LjQyLTguMDEsMC0xLjA0LTM1LjA1LDguMjEtMjAuMzkiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTIiIGQ9Ik0yMS4yMSwyMC40QzExLjk2LDUuNzQsMCwzNy42NywwLDI5LjQyLDAsMTMuMTcsMTMuMTcsMCwyOS40MiwwYzguMDEsMCwxLjAzLDM1LjA2LTguMjEsMjAuNCIvPgogICAgICA8L2c+CiAgICAgIDxnPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTU1Ljg2LDIzLjEzYzAtNy45MSwwLTkuMzgtLjEtMTEuMDQtLjExLTEuNzctLjUyLTIuNi0yLjI0LTIuOTYtLjQyLS4xMS0xLjMxLS4xNi0yLjAzLS4xNi0uNTcsMC0uODktLjEtLjg5LS40N3MuMzYtLjQ3LDEuMTQtLjQ3YzIuNzYsMCw2LjA0LjE2LDcuNDkuMTYsMi4xNCwwLDUuMTYtLjE2LDcuNTUtLjE2LDYuNTEsMCw4Ljg1LDIuMTgsOS42OCwyLjk2LDEuMTQsMS4wOSwyLjYsMy40NCwyLjYsNi4yLDAsNy4zOC01LjQxLDEyLjU5LTEyLjgsMTIuNTktLjI2LDAtLjgzLDAtMS4wOS0uMDUtLjI2LS4wNS0uNjItLjExLS42Mi0uNDcsMC0uNDIuMzYtLjU3LDEuNDYtLjU3LDIuOTEsMCw2Ljk3LTMuMjgsNi45Ny04LjYsMC0xLjcxLS4xNi01LjE5LTMuMDctNy44LTEuODctMS43Mi00LjAxLTIuMDItNS4yMS0yLjAyLS43OCwwLTEuNTYuMDQtMi4wMi4yLS4yNi4xLS40Mi40Mi0uNDIuOTl2MjAuODFjMCw0Ljc5LDAsOC45LjI2LDExLjE0LjE2LDEuNDYuNDcsMi42MSwyLjAzLDIuODIuNzIuMSwxLjg4LjIsMi42NS4yLjU3LDAsLjgzLjE1LjgzLjQyLDAsLjM2LS40Mi41Mi0uOTkuNTItMy40NCwwLTYuNzItLjE2LTguMDctLjE2LTEuMiwwLTQuNDguMTYtNi41Ni4xNi0uNjgsMC0xLjA0LS4xNi0xLjA0LS41MiwwLS4yNi4yMS0uNDIuODMtLjQyLjc4LDAsMS40MS0uMSwxLjg4LS4yLDEuMDQtLjIxLDEuMy0xLjM2LDEuNTEtMi44Ny4yNi0yLjE5LjI2LTYuMy4yNi0xMS4wOXYtOS4xNVoiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik04OC45LDI2LjcyYzAtNi43MiwwLTcuOTctLjA1LTkuMzctLjExLTEuNTEtLjUyLTEuOTgtMS45OC0yLjQtLjM2LS4xMS0xLjE0LS4xNi0xLjgyLS4xNi0uNDYsMC0uNzgtLjE1LS43OC0uNDdzLjM2LS40MiwxLjA0LS40MmMyLjQsMCw1LjMxLjExLDYuMjQuMTEsMS41NiwwLDUuNzMtLjExLDcuMTMtLjExLDIuOTEsMCw2LjI1LjI2LDguNjksMS44NywxLjMuODksMy4yMywzLjEzLDMuMjMsNi4wOSwwLDMuMjgtMS44OCw2LjE5LTYuMzUsOS43OCw0LjA2LDQuOTksNy4yOSw5LjAxLDEwLjA0LDExLjc2LDIuNTUsMi41Niw0LjE2LDIuNzcsNC44OSwyLjkyLjQ3LjEuNzMuMSwxLjA5LjFzLjU4LjI2LjU4LjQ3YzAsLjM2LS4zMS40Ny0uODkuNDdoLTQuMzdjLTIuNTUsMC0zLjgtLjI2LTQuOTktLjg4LTEuOTgtLjk5LTMuNy0zLjA4LTYuMjUtNi41LTEuODItMi40LTMuNzQtNS4zNi00LjMyLTYuMDQtLjI2LS4yNi0uNTItLjMtLjgzLS4zbC00LjExLS4xMWMtLjIxLDAtLjM2LjExLS4zNi4zN3YuNjJjMCw0LjEyLjA1LDcuNTUuMjYsOS40Mi4xNSwxLjMuMzcsMi4xMywxLjc3LDIuMzUuNjcuMDksMS42Ni4xNSwyLjI0LjE1LjM2LDAsLjU3LjI2LjU3LjQ3LDAsLjMxLS4zNi40Ny0uOTMuNDctMi42NSwwLTYuNDYtLjE2LTcuMTMtLjE2LS44OCwwLTMuNzkuMTYtNS42Mi4xNi0uNTcsMC0uODktLjE2LS44OS0uNDcsMC0uMjEuMTYtLjQ3LjczLS40Ny42OCwwLDEuMi0uMDUsMS42Mi0uMTUuOTQtLjIxLDEuMi0xLjA1LDEuMzUtMi4zNS4yMS0xLjg3LjIxLTUuMzYuMjEtOS40MnYtNy44Wk05NC43MywzMC4xNWMwLC40Ni4xLjYzLjQxLjc4Ljk5LjMxLDIuMzQuNDEsMy40OS40MSwxLjgyLDAsMi40NS0uMTYsMy4yMy0uNzMsMS40LS45OSwyLjk2LTIuOTEsMi45Ni02LjU1LDAtNi4yNC00LjI3LTcuODUtNi45Ny03Ljg1LTEuMTQsMC0yLjIzLjA1LTIuNzEuMTUtLjMxLjEtLjQxLjI2LS40MS42M3YxMy4xNloiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xMjQuNiwyNi43MmMwLTYuNzIsMC03Ljk3LS4wNS05LjM3LS4xMS0xLjUxLS41OC0yLjAzLTEuNTctMi4zNS0uNTItLjE1LTEuMDktLjItMS42Ni0uMi0uNDcsMC0uNzMtLjEtLjczLS41MiwwLS4yNi4zNy0uMzYsMS4wOS0uMzcsMS43MiwwLDQuODQuMTEsNi4xNC4xMSwxLjE1LDAsNC4xMS0uMTEsNS44OC0uMTEuNTcsMCwuOTQuMTEuOTQuMzYsMCwuNDItLjI2LjUyLS43My41MnMtLjgzLjA1LTEuMzUuMTZjLTEuMjUuMjEtMS42Mi44Mi0xLjcyLDIuNC0uMSwxLjQtLjEsMi42NS0uMSw5LjM3djcuOGMwLDQuMjcsMCw3LjgxLjIxLDkuNjguMTYsMS4xOS40NywxLjg3LDEuODIsMi4wOS42My4xLDEuNjcuMTUsMi4zNC4xNS41MiwwLC43My4yNi43My40NywwLC4zMS0uMzcuNDctLjg5LjQ3LTMuMDIsMC02LjE0LS4xNi03LjM5LS4xNi0xLjA0LDAtNC4xNy4xNi01Ljk5LjE2LS41NywwLS44OS0uMTYtLjg5LS40NywwLS4yMS4xNi0uNDcuNzMtLjQ3LjY4LDAsMS4yLS4wNSwxLjYxLS4xNS45NC0uMjEsMS4yLS44NCwxLjM2LTIuMTQuMjEtMS44Mi4yMS01LjM2LjIxLTkuNjN2LTcuOFoiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xNDguNjUsNDEuMzRjLjExLDMuNDMuNjgsNC40NywxLjU2LDQuNzkuNzguMjYsMS42Ni4zMSwyLjM5LjMxLjUyLDAsLjc4LjIxLjc4LjQ3LDAsLjM2LS40MS40Ny0xLjA0LjQ3LTIuOTYsMC01LjEtLjE2LTUuOTMtLjE2LS40MiwwLTIuNi4xNi00Ljk1LjE2LS42MiwwLTEuMDQtLjA1LTEuMDQtLjQ3LDAtLjI2LjMxLS40Ny43My0uNDcuNjMsMCwxLjQ2LS4wNSwyLjA4LS4yLDEuMTktLjMyLDEuMzUtMS41MSwxLjQtNS4zNmwuNDItMjYuMjJjMC0uOS4zMS0xLjUxLjc4LTEuNTEuNTcsMCwxLjE5LjY4LDEuOTcsMS40Ni41Ny41Nyw3LjQ0LDcuNiwxNC4xLDE0LjExLDMuMTIsMy4wNyw5LjIxLDkuMzEsOS44OSw5Ljk1aC4yMWwtLjQ3LTE5LjY4Yy0uMDUtMi43LS40Ny0zLjQ4LTEuNTYtMy45LS42Ny0uMjYtMS43Ny0uMjYtMi4zOS0uMjYtLjU3LDAtLjczLS4yMS0uNzMtLjQ3LDAtLjM2LjQ3LS40MiwxLjE1LS40MiwyLjM5LDAsNC44My4xMSw1LjgyLjExLjUyLDAsMi4yMy0uMTEsNC40OC0uMTEuNjIsMCwxLjA0LjA2LDEuMDQuNDIsMCwuMjYtLjI2LjQ3LS43OC40Ny0uNDcsMC0uODMsMC0xLjQuMTYtMS4yNS4zNi0xLjYyLDEuMTQtMS42NywzLjY0bC0uNTIsMjcuODljMCwuOTktLjM3LDEuNC0uNzMsMS40LS43OCwwLTEuNC0uNDYtMS44Ny0uOTMtMi44Ni0yLjY1LTguNTgtOC4xMi0xMy4zNy0xMi43NS01LTQuNzgtOS44My0xMC4xNC0xMC43MS0xMC45MmgtLjE2bC41MiwxOC4wNloiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik0xOTAuMjgsNDMuMTZjLTQuNTMtMy44LTUuNzMtOC44LTUuNzMtMTMuMDYsMC0zLjAyLjk5LTguMjIsNS4zNi0xMi4xMywzLjMzLTIuOTEsNy43LTQuNjgsMTQuNTItNC42OCwyLjg2LDAsNC41OC4yMSw2LjY3LjQ2LDEuNzEuMjcsMy4yMi41OCw0LjU4LjczLjUyLjA1LjY4LjI2LjY4LjUxLDAsLjM3LS4xMS44OS0uMjEsMi40NS0uMSwxLjQ2LS4xLDMuOS0uMTYsNC43OS0uMDUuNjMtLjIxLDEuMDktLjYyLDEuMDktLjM3LDAtLjQ3LS4zNi0uNDctLjk0LS4wNS0xLjQtLjYyLTIuOTYtMS43Ny00LjExLTEuNTYtMS41MS00LjYzLTIuNi04Ljg1LTIuNnMtNi41Ni43Mi04LjY0LDIuNDljLTMuMzgsMi45Mi00LjIyLDcuMTgtNC4yMiwxMS41LDAsMTAuNTIsOC4xMiwxNS41MSwxNC4yNiwxNS41MSw0LjA2LDAsNi4zLS4zMSw4LjEyLTIuMzQuNzgtLjg5LDEuNC0yLjE0LDEuNTYtMi45Ny4xMS0uNjguMjEtLjg5LjU3LS44OS4zMSwwLC41Mi40Mi41Mi43OCwwLC41MS0uNTIsNC4zNy0uOTksNS44OC0uMjEuNzgtLjQyLjk5LTEuMiwxLjMtMS44Mi43My01LjMxLjk5LTguMjguOTktNi4yNCwwLTExLjU1LTEuMy0xNS43MS00Ljc5Ii8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjI2LjI0LDI2LjcyYzAtNi43MiwwLTcuOTctLjA1LTkuMzctLjEtMS41MS0uNTctMi4wMy0xLjU2LTIuMzUtLjUyLS4xNS0xLjA5LS4yLTEuNjYtLjItLjQ3LDAtLjcyLS4xLS43Mi0uNTIsMC0uMjYuMzYtLjM2LDEuMDktLjM3LDEuNzIsMCw0Ljg0LjExLDYuMTQuMTEsMS4xNCwwLDQuMTEtLjExLDUuODgtLjExLjU3LDAsLjk0LjExLjk0LjM2LDAsLjQyLS4yNi41Mi0uNzMuNTJzLS44My4wNS0xLjM1LjE2Yy0xLjI1LjIxLTEuNjEuODItMS43MiwyLjQtLjExLDEuNC0uMTEsMi42NS0uMTEsOS4zN3Y3LjhjMCw0LjI3LDAsNy44MS4yMSw5LjY4LjE2LDEuMTkuNDcsMS44NywxLjgyLDIuMDkuNjIuMSwxLjY3LjE1LDIuMzQuMTUuNTIsMCwuNzMuMjYuNzMuNDcsMCwuMzEtLjM2LjQ3LS44OC40Ny0zLjAyLDAtNi4xNC0uMTYtNy4zOS0uMTYtMS4wNCwwLTQuMTYuMTYtNS45OC4xNi0uNTcsMC0uODktLjE2LS44OS0uNDcsMC0uMjEuMTYtLjQ3LjcyLS40Ny42OCwwLDEuMi0uMDUsMS42Mi0uMTUuOTQtLjIxLDEuMi0uODQsMS4zNS0yLjE0LjIxLTEuODIuMjEtNS4zNi4yMS05LjYzdi03LjhaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjQ3LjQyLDI2LjcyYzAtNi43MiwwLTcuOTctLjA1LTkuMzctLjEtMS41MS0uNTItMS45OC0xLjk4LTIuNC0uMzYtLjExLTEuMTUtLjE2LTEuODItLjE2LS40NywwLS43OC0uMTUtLjc4LS40N3MuMzctLjQyLDEuMDQtLjQyYzIuMzksMCw1LjMuMTEsNi42MS4xMSwxLjg3LDAsNS41MS0uMTEsNy41OS0uMTEsNS43MywwLDcuODEsMS44Nyw4LjU0LDIuNDkuOTkuOTQsMi4yOSwyLjkyLDIuMjksNS4zMiwwLDYuMjQtNC45OSwxMC43MS0xMS41LDEwLjcxLS4yMSwwLTEuMTQsMC0xLjM1LS4wNS0uMjYsMC0uNTctLjE2LS41Ny0uNDYsMC0uMzcuNTItLjU4LDEuNTEtLjU4LDIuNTUsMCw2LjE0LTIuNjUsNi4xNC03LjE4LDAtMS40NS0uMTUtNC4zNy0yLjcxLTYuNTYtMS42Ni0xLjQ2LTMuNTMtMS42Ni00LjU4LTEuNjYtLjY4LDAtMS41Ni4wNS0xLjk4LjIxLS4yNi4xMS0uMzYuMzYtLjM2LjgzdjE3LjUzYzAsNC4wNiwwLDcuNTUuMjEsOS40Ny4xNiwxLjI1LjQyLDIuMDgsMS43NywyLjMuNjguMSwxLjY3LjE1LDIuMzQuMTUuNTMsMCwuNzMuMjYuNzMuNDcsMCwuMzEtLjM3LjQ3LS44My40Ny0zLjA3LDAtNi4zLS4xNi03LjQ5LS4xNi0xLjA1LDAtMy45Ni4xNi01Ljc4LjE2LS41NywwLS44OS0uMTYtLjg5LS40NywwLS4yMS4xNS0uNDcuNzMtLjQ3LjY4LDAsMS4yLS4wNSwxLjYxLS4xNS45NC0uMjEsMS4yLTEuMDUsMS4zNi0yLjM1LjItMS44Ny4yLTUuMzYuMi05LjQydi03LjhaIi8+CiAgICAgICAgPHBhdGggY2xhc3M9ImNscy0xIiBkPSJNMjgwLjQyLDM2LjIzYy0uMjYsMC0uMzIuMDYtLjQyLjMybC0yLjQ0LDUuOTJjLS40NywxLjEtLjY4LDIuMTktLjY4LDIuNzEsMCwuNzguNDIsMS4yNSwxLjgyLDEuMjVoLjY3Yy41OCwwLC42OC4yMS42OC40NywwLC4zNi0uMjYuNDctLjczLjQ3LTEuNTEsMC0zLjY0LS4xNi01LjEtLjE2LS40NywwLTIuOTIuMTYtNS4zMS4xNi0uNTgsMC0uODMtLjEtLjgzLS40NywwLS4yNi4xNS0uNDcuNTItLjQ3LjQxLDAsLjk0LS4wNSwxLjM1LS4wNSwyLjA4LS4zMSwyLjg2LTEuNjYsMy44LTMuOTFsMTEuOTctMjcuODNjLjUyLTEuMjUuODktMS43NywxLjM2LTEuNzcuNjgsMCwuODkuNDIsMS4zNSwxLjQsMS4wOSwyLjQ1LDguNzQsMjAuNTYsMTEuNjYsMjcuMjcsMS43Nyw0LDMuMDcsNC41OCwzLjksNC43NC42OC4xLDEuMi4xNSwxLjcxLjE1LjQxLDAsLjYzLjE1LjYzLjQ3LDAsLjM2LS4yNi40Ny0xLjk4LjQ3LTEuNjEsMC00Ljk0LDAtOC43OS0uMS0uODMtLjA1LTEuMzYtLjA1LTEuMzYtLjM2LDAtLjI2LjExLS40Mi41OC0uNDcuMzEtLjA1LjYyLS40Ny40MS0uOTlsLTMuNTMtOC44OWMtLjExLS4yNy0uMjYtLjMyLS40Ny0uMzJoLTEwLjc3Wk0yOTAuMTksMzMuNzljLjIxLDAsLjI2LS4xLjIxLS4yNmwtNC4zMi0xMS4yNC0uMjEtLjQyLS4yNi40Mi00LjQzLDExLjE5Yy0uMS4yMSwwLC4zMS4xNi4zMWg4Ljg1WiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTMxNy40NywzNC41MmMwLDUuNjgsMCw4LjQ4Ljk5LDkuMzEuNzguNjgsMi41NS45NCw2LjA5Ljk0LDIuNDQsMCw0LjIyLS4wNSw1LjM2LTEuMjQuNTgtLjU4LDEuMDQtMS44MywxLjE0LTIuNjYuMDYtLjQyLjE2LS42Ny41Mi0uNjcuMzEsMCwuNDIuNDcuNDIuOThzLS4zMSwzLjgtLjY3LDUuMTFjLS4zMS45OC0uNTIsMS4xOS0yLjkyLDEuMTktMy4yOCwwLTUuOTMtLjA1LTguMjItLjE2LTIuMjktLjA1LTQuMjEtLjExLTYuMDktLjExLS41MiwwLTEuNTEuMDUtMi42MS4wNS0xLjA5LjA1LTIuMjQuMS0zLjE3LjEtLjU4LDAtLjg5LS4xNi0uODktLjQ3LDAtLjIxLjE2LS40Ny43My0uNDcuNjgsMCwxLjE5LS4wNSwxLjYxLS4xNS45NC0uMjEsMS4yLTEuMDUsMS4zNS0yLjM1LjIxLTEuODcuMjEtNS4zNi4yMS05LjQydi03LjhjMC02LjcyLDAtNy45Ny0uMDUtOS4zNy0uMS0xLjUxLS41Mi0xLjk4LTEuOTgtMi40LS4zNi0uMS0uOTMtLjE1LTEuNTEtLjE1LS41MiwwLS43OC0uMTUtLjc4LS40N3MuMzEtLjQyLjk5LS40MmMyLjEzLDAsNS4wNS4xMSw2LjI5LjExLDEuMSwwLDQuODQtLjExLDYuNjEtLjExLjY3LDAsLjk5LjExLjk5LjQycy0uMjYuNDctLjgzLjQ3Yy0uNTIsMC0xLjI1LjA1LTEuNzcuMTUtMS4yNS4yMS0xLjYxLjgzLTEuNzIsMi40LS4xLDEuNC0uMSwyLjY1LS4xLDkuMzd2Ny44WiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTM3OS4zOSwyOC4zM2MuMTEsMCwuMjYtLjA2LjI2LS4zMXYtLjk0YzAtNi43Mi0uMDUtOC4zMy0uMTEtOS43My0uMS0xLjUxLS41Mi0xLjk4LTEuOTctMi40LS4zNy0uMTEtMS4xNC0uMTYtMS43Ny0uMTYtLjUxLDAtLjc3LS4xNS0uNzctLjQ3cy4zMS0uNDIuOTktLjQyYzIuNDUsMCw1LjY4LjExLDYuODcuMTEsMS4xLDAsNC4xMi0uMTEsNS44OC0uMTEuNjgsMCwuOTkuMTEuOTkuNDJzLS4zMS40Ny0uODMuNDdjLS4zNiwwLS43OC4wNS0xLjM1LjE2LTEuMi4yMS0xLjU2LjgyLTEuNjcsMi40LS4xMSwxLjQtLjExLDIuNjUtLjExLDkuMzd2Ny44YzAsNC4wNiwwLDcuNTUuMjEsOS40Ny4xNiwxLjI1LjQyLDIuMDgsMS44MiwyLjMuNjMuMSwxLjYyLjE1LDIuMzQuMTUuNDcsMCwuNzIuMjYuNzIuNDcsMCwuMzEtLjM2LjQ3LS45My40Ny0yLjk3LDAtNS45OS0uMTYtNy4yMy0uMTYtMS4wNCwwLTQuMjcuMTYtNi4wNC4xNi0uNjIsMC0uOTktLjE2LS45OS0uNDcsMC0uMjEuMjEtLjQ3LjczLS40Ny43MywwLDEuMjUtLjA1LDEuNjYtLjE1Ljk0LS4yMSwxLjItMS4wNSwxLjM1LTIuMzUuMjEtMS44Ny4yMS01LjI1LjIxLTkuMzF2LTMuMzlsLS4yNi0uMjZoLTE3LjI4Yy0uMTUsMC0uMzEuMDUtLjMxLjI2djMuMzljMCw0LjA3LjA2LDcuNDQuMjYsOS4zNy4xNiwxLjI1LjQyLDIuMDgsMS43NywyLjMuNjIuMSwxLjY3LjE1LDIuMzQuMTUuNTIsMCwuNzMuMjYuNzMuNDcsMCwuMzEtLjM3LjQ3LS45NC40Ny0yLjk3LDAtNi4xNC0uMTYtNy40NC0uMTYtMS4wNCwwLTQuMDYuMTYtNS44OC4xNi0uNTcsMC0uODktLjE2LS44OS0uNDcsMC0uMjEuMTYtLjQ3LjczLS40Ny42OCwwLDEuMi0uMDUsMS42Mi0uMTUuOTMtLjIxLDEuMi0xLjA1LDEuMzUtMi4zNS4yMS0xLjg3LjIxLTUuMzYuMjEtOS40MnYtNy44YzAtNi43MiwwLTcuOTctLjA1LTkuMzctLjEtMS41MS0uNTItMS45OC0xLjk4LTIuNC0uMzctLjExLTEuMTUtLjE2LTEuODItLjE2LS40NywwLS43OC0uMTUtLjc4LS40N3MuMzctLjQyLjk5LS40MmMyLjQ1LDAsNS40Ny4xMSw2LjcyLjExLDEuMDksMCw0LjI2LS4xMSw2LjA4LS4xMS42MiwwLC45NC4xMS45NC40MnMtLjI2LjQ3LS44My40N2MtLjM2LDAtLjc4LjA1LTEuMzEuMTYtMS4yNS4yMS0xLjYxLjgyLTEuNzEsMi40LS4xMSwxLjQtLjExLDMuMDEtLjExLDkuNzN2Ljk0YzAsLjI2LjE2LjMxLjMxLjMxaDE3LjI4WiIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTM5NS43OSwzMC42MWMwLTcuNTQsNS4zMS0xNy4zMiwxOS4yLTE3LjMyLDExLjU1LDAsMTguNzQsNi40LDE4Ljc0LDE2LjU1cy03LjQsMTguMTEtMTkuMjEsMTguMTFjLTEzLjMyLDAtMTguNzMtOS40Ny0xOC43My0xNy4zM000MjYuOSwzMS40NWMwLTkuNzgtNS44OC0xNS44Mi0xMy4yNy0xNS44Mi01LjEsMC0xMS4wOSwyLjcxLTExLjA5LDEzLjYzLDAsOS4xMSw1LjIsMTYuMjksMTMuODUsMTYuMjksMy4yMiwwLDEwLjUxLTEuNTEsMTAuNTEtMTQuMSIvPgogICAgICAgIDxwYXRoIGNsYXNzPSJjbHMtMSIgZD0iTTQ0NS41MywxNC4wN2MuMS0uNzMuNTItMS4xNS44OC0xLjE1LjQ3LDAsLjc4LjIxLDEuNDEsMS40MWwxMi4yOCwyNC42NiwxMi4yNy0yNC45N2MuMzYtLjczLjc4LTEuMSwxLjItMS4xLjM2LDAsLjg5LjQ3LDEuMDQsMS40MWw0LjE3LDI3LjMyYy40MiwyLjc2LjgzLDMuOTUsMi4yNCw0LjM3LDEuMy4zNiwyLjAyLjQxLDIuNi40MS40MSwwLC43My4xNS43My40MiwwLC4zNy0uNTIuNTItMS4yLjUyLTEuMTQsMC03LjY1LS4yMS05LjQ3LS4zMi0xLjEtLjA2LTEuMzUtLjI2LTEuMzUtLjUyLDAtLjIxLjItLjM2LjUyLS40Ny4yNi0uMS4zNi0uNjMuMjEtMS44N2wtMi41NS0xOS4xNWgtLjE2bC05LjgzLDE5Ljc4Yy0xLjA0LDIuMDgtMS4zLDIuNS0xLjgzLDIuNS0uNTYsMC0xLjA5LS44OS0xLjgyLTIuMjQtMS4wOS0yLjAzLTQuNzMtOC43OS01LjI2LTEwLjA0LS4zNi0uODMtMy4wNy02LjQtNC41OC05LjQ3aC0uMTVsLTIuMTksMTcuMjhjLS4xLjc3LS4xNiwxLjM1LS4xNiwyLjA4LDAsLjgzLjYzLDEuMTQsMS40LDEuMy43OC4xNSwxLjE5LjIsMS42Mi4ycy43My4yMS43My40MmMwLC40Mi0uNDIuNTItMS4wOS41Mi0xLjkzLDAtNC4wMS0uMTYtNC44NC0uMTYtLjg4LDAtMy4wNy4xNi00LjUzLjE2LS40NywwLS44My0uMS0uODMtLjUyLDAtLjIxLjI2LS40Mi43My0uNDIuMzcsMCwuNjgsMCwxLjQxLS4xLDEuMjUtLjE1LDEuNjYtMS45MiwxLjg3LTMuMzlsNC41Mi0yOC44OFoiLz4KICAgICAgICA8cGF0aCBjbGFzcz0iY2xzLTEiIGQ9Ik00OTEuODQsMjYuNzJjMC02LjcyLDAtNy45Ny0uMDUtOS4zNy0uMTEtMS41MS0uNTItMS45OC0xLjk4LTIuNC0uMzctLjExLTEuMTUtLjE2LTEuODMtLjE2LS40NywwLS43Ny0uMTUtLjc3LS40N3MuMzctLjQyLDEuMDQtLjQyYzIuMzksMCw1LjMxLjExLDYuNjIuMTEsMS40NSwwLDExLjYuMDUsMTIuNDgsMCwuODQtLjA1LDEuNTctLjIxLDEuOTMtLjI3LjI2LS4wNS41MS0uMi43Mi0uMi4yNiwwLC4zMS4yLjMxLjQyLDAsLjMxLS4yNi44My0uMzYsMi44Ni0uMDUuNDYtLjE2LDIuMzktLjI2LDIuOTEtLjA1LjItLjE1LjczLS41Mi43My0uMzEsMC0uMzctLjIxLS4zNy0uNTcsMC0uMzItLjA1LTEuMDktLjMtMS42Mi0uMzgtLjc4LS43NC0xLjQtMy4wMy0xLjYxLS43OC0uMS02LjI0LS4yMS03LjE4LS4yMS0uMiwwLS4zMS4xNS0uMzEuNDF2MTAuOTNjMCwuMjYuMDUuNDYuMzEuNDYsMS4wNCwwLDYuOTcsMCw4LjAxLS4xLDEuMS0uMSwxLjc3LS4yMSwyLjItLjY4LjM2LS4zMS41MS0uNTcuNzItLjU3cy4zNi4yMS4zNi40Ny0uMTEuOTgtLjM2LDMuMjJjLS4xMS44OS0uMjEsMi42Ni0uMjEsMi45NywwLC4zNy0uMDUsMS0uNDcsMS0uMzEsMC0uNDItLjE2LS40Mi0uMzctLjA1LS40Ni0uMDUtMS4wMy0uMTUtMS42MS0uMjYtLjg5LS44My0xLjU2LTIuNTUtMS43My0uODQtLjEtNi4wNC0uMjEtNy4xOC0uMjEtLjIxLDAtLjI2LjIxLS4yNi40N3YzLjU0YzAsMS41MS0uMDUsNS4yNiwwLDYuNTUuMTEsMy4wMiwxLjUxLDMuNyw2LjIsMy43LDEuMiwwLDMuMTItLjA2LDQuMzItLjU4LDEuMTQtLjUyLDEuNjYtMS40NSwxLjk3LTMuMjguMTEtLjQ3LjIxLS42Ny41Mi0uNjcuMzcsMCwuNDIuNTcuNDIsMS4wNSwwLC45OC0uMzcsNC0uNjIsNC44OS0uMzIsMS4xNS0uNzMsMS4xNS0yLjQ0LDEuMTUtMy40NCwwLTYuMTktLjA1LTguNDQtLjE2LTIuMjMtLjA1LTMuOTUtLjExLTUuMy0uMTEtLjUyLDAtMS41MS4wNi0yLjYuMDYtMS4xLjA1LTIuMjQuMS0zLjE3LjEtLjU4LDAtLjg4LS4xNi0uODgtLjQ3LDAtLjIxLjE2LS40Ny43Mi0uNDcuNjgsMCwxLjItLjA1LDEuNjEtLjE1Ljk0LS4yMSwxLjItMS4wNSwxLjM2LTIuMzUuMjEtMS44Ny4yMS01LjM2LjIxLTkuNDJ2LTcuOFoiLz4KICAgICAgPC9nPgogICAgPC9nPgogIDwvZz4KPC9zdmc+" alt="PRINCIPAL HOME" style="height:22px"><span class="nav-logo-recruit" style="color:var(--sky-600)">RECRUIT</span></a>
+    <button id="drawerClose" style="width:38px;height:38px;background:var(--sky-50);border:1.5px solid var(--sky-100);border-radius:10px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg" style="width:16px;height:16px;display:block">
+        <line x1="2" y1="2" x2="14" y2="14" stroke="#2B8EC2" stroke-width="2" stroke-linecap="round"/>
+        <line x1="14" y1="2" x2="2" y2="14" stroke="#2B8EC2" stroke-width="2" stroke-linecap="round"/>
+      </svg>
+    </button>
+  </div>
+  <ul class="nav-drawer-links">
+    <li><a href="index.html#about" onclick="closeDrawer()">会社を知る<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#dayflow" onclick="closeDrawer()">仕事を知る<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#people" onclick="closeDrawer()">人を知る<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#benefits" onclick="closeDrawer()">環境・制度<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#flow" onclick="closeDrawer()">選考フロー<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#requirement" onclick="closeDrawer()">募集要項<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+    <li><a href="index.html#news" onclick="closeDrawer()">お知らせ<svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:var(--ink-4)"><path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/></svg></a></li>
+  </ul>
+  <div class="nav-drawer-cta">
+    <a href="entry.html" onclick="closeDrawer()">エントリーはこちら →</a>
+  </div>
+</div>
+
 
 <!-- ══ HERO ══════════════════════════════════════════════ -->
 <section class="hero">
@@ -962,11 +1056,11 @@ a{text-decoration:none;color:inherit}
     <span class="cta-en">Join Us</span>
     <h2 class="cta-h2">あなたの情熱で、<br>人々の夢を形にしませんか。</h2>
     <p class="cta-body">プリンシパルホームでは、施工管理・住宅設計・賃貸管理職を募集中です。<br>一棟一棟に誠実に向き合い、お客様の笑顔を作る仕事を一緒にしましょう。</p>
-    <a href="recruit_2.html#jobs" class="btn-cta">
+    <a href="index.html#requirement" class="btn-cta">
       募集要項を見る
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10M9 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </a>
-    <a href="recruit_2.html" class="btn-cta-ghost">採用TOPへ戻る</a>
+    <a href="index.html" class="btn-cta-ghost">採用TOPへ戻る</a>
   </div>
 </section>
 
@@ -1204,6 +1298,19 @@ const observer = new IntersectionObserver(entries => {
   });
 }, {threshold: .12});
 document.querySelectorAll('.rv,.rv-l,.rv-r').forEach(el => observer.observe(el));
+
+// ── Hamburger drawer (TOPページと共通) ──
+const drawer = document.getElementById('navDrawer');
+const navBurgerBtn = document.getElementById('navBurger');
+function closeDrawer(){
+  drawer.classList.remove('open');
+  navBurgerBtn.classList.remove('open');
+}
+navBurgerBtn.addEventListener('click', ()=>{
+  drawer.classList.add('open');
+  navBurgerBtn.classList.add('open');
+});
+document.getElementById('drawerClose').addEventListener('click', closeDrawer);
 </script>
 </body>
 </html>

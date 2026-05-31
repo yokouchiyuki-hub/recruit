@@ -189,16 +189,36 @@ body{
 
 .form-note{font-size:12px;color:var(--ink-4);text-align:center;margin-top:16px;line-height:1.7}
 
-/* thank-you message */
-.thanks{display:none;text-align:center;padding:30px 10px}
-.thanks.show{display:block}
-.thanks-ico{
-  width:72px;height:72px;border-radius:50%;background:var(--mint-pale);
-  display:flex;align-items:center;justify-content:center;margin:0 auto 20px;
+/* ステップインジケーター */
+.form-steps{display:flex;align-items:center;justify-content:center;gap:0;margin-bottom:34px}
+.fstep{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--ink-4)}
+.fstep-num{
+  display:flex;align-items:center;justify-content:center;width:26px;height:26px;
+  border-radius:50%;background:var(--cream-200);color:var(--ink-4);
+  font-family:var(--font-en);font-size:13px;font-weight:700;
 }
-.thanks-ico svg{width:34px;height:34px}
-.thanks h3{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:12px}
-.thanks p{font-size:14px;color:var(--ink-3);line-height:1.9}
+.fstep.is-active{color:var(--sky-500)}
+.fstep.is-active .fstep-num{background:var(--sky-500);color:#fff}
+.fstep.is-done{color:var(--mint)}
+.fstep.is-done .fstep-num{background:var(--mint);color:#fff}
+.fstep-bar{width:38px;height:2px;background:var(--cream-300);margin:0 12px}
+
+/* 確認画面 */
+.confirm{display:none}
+.confirm.show{display:block}
+.confirm-head{text-align:center;margin-bottom:28px}
+.confirm-eyebrow{font-family:var(--font-en);font-size:13px;font-weight:700;letter-spacing:.25em;text-transform:uppercase;color:var(--sky-400);margin-bottom:8px}
+.confirm-title{font-size:22px;font-weight:700;color:var(--ink);margin-bottom:10px}
+.confirm-lead{font-size:14px;color:var(--ink-3);line-height:1.8}
+.confirm-list{border-top:1.5px solid var(--cream-200);margin-bottom:30px}
+.confirm-list .ci{display:grid;grid-template-columns:200px 1fr;gap:16px;padding:16px 4px;border-bottom:1.5px solid var(--cream-200)}
+.confirm-list dt{font-size:14px;font-weight:700;color:var(--ink-2)}
+.confirm-list dd{font-size:15px;color:var(--ink);line-height:1.7;white-space:pre-wrap;word-break:break-word}
+.confirm-list dd.empty{color:var(--ink-4)}
+.confirm-actions{display:flex;flex-direction:column;gap:14px}
+.btn-edit{font-family:var(--font-jp);font-size:15px;font-weight:500;color:var(--ink-3);background:#fff;border:1.5px solid var(--cream-300);border-radius:var(--r-pill);padding:15px;cursor:pointer;transition:var(--trans)}
+.btn-edit:hover{background:var(--cream-50);color:var(--ink-2)}
+@media(max-width:640px){.confirm-list .ci{grid-template-columns:1fr;gap:4px}}
 
 /* ── Footer ── */
 .form-footer{
@@ -241,6 +261,15 @@ body{
 <!-- ══ FORM ══ -->
 <div class="form-wrap">
   <div class="form-card">
+
+    <!-- ステップ -->
+    <div class="form-steps" id="formSteps">
+      <div class="fstep is-active" data-step="1"><span class="fstep-num">1</span>入力</div>
+      <span class="fstep-bar"></span>
+      <div class="fstep" data-step="2"><span class="fstep-num">2</span>確認</div>
+      <span class="fstep-bar"></span>
+      <div class="fstep" data-step="3"><span class="fstep-num">3</span>完了</div>
+    </div>
 
     <form id="entryForm" novalidate>
       <p class="form-intro">
@@ -382,13 +411,18 @@ body{
       <p class="form-note">送信内容に誤りがないかご確認のうえ、送信してください。</p>
     </form>
 
-    <!-- 送信完了メッセージ -->
-    <div class="thanks" id="thanks">
-      <div class="thanks-ico">
-        <svg viewBox="0 0 24 24" fill="none"><path d="M5 13l4 4L19 7" stroke="#8ECDB8" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <!-- 確認画面 -->
+    <div class="confirm" id="confirm">
+      <div class="confirm-head">
+        <div class="confirm-eyebrow">Confirmation</div>
+        <h2 class="confirm-title">入力内容のご確認</h2>
+        <p class="confirm-lead">以下の内容で送信します。よろしければ「この内容で送信する」を押してください。</p>
       </div>
-      <h3>ご応募ありがとうございました</h3>
-      <p>担当者より追ってご連絡いたします。<br>しばらくお待ちくださいませ。</p>
+      <dl class="confirm-list" id="confirmList"></dl>
+      <div class="confirm-actions">
+        <button type="button" class="btn-submit" id="btnFinalSubmit"><span>この内容で送信する</span><span class="arr">→</span></button>
+        <button type="button" class="btn-edit" id="btnEdit">← 内容を修正する</button>
+      </div>
     </div>
 
   </div>
@@ -428,15 +462,73 @@ function checkEmail(){
 }
 emailConfirm.addEventListener('input',checkEmail);
 
-// 送信
-document.getElementById('entryForm').addEventListener('submit',function(e){
+// ── 確認画面 ──
+const form=document.getElementById('entryForm');
+const confirm=document.getElementById('confirm');
+const confirmList=document.getElementById('confirmList');
+const steps=document.querySelectorAll('#formSteps .fstep');
+
+function setStep(n){
+  steps.forEach(s=>{
+    const d=+s.dataset.step;
+    s.classList.toggle('is-active',d===n);
+    s.classList.toggle('is-done',d<n);
+  });
+}
+
+function val(name){const el=form.elements[name];return el?el.value.trim():'';}
+
+function buildConfirm(){
+  const dob = (val('dob_year')&&val('dob_month')&&val('dob_day'))
+    ? `${val('dob_year')}年${val('dob_month')}月${val('dob_day')}日` : '';
+  const building = val('building');
+  const addr = `${val('prefecture')} ${val('city')} ${val('address_line')}`.trim() + (building?` ${building}`:'');
+  let files='';
+  if(resume.files && resume.files.length){files=Array.from(resume.files).map(f=>f.name).join('\n');}
+  const rows=[
+    ['応募職種', val('job_type')],
+    ['お名前', val('name')],
+    ['フリガナ', val('name_kana')],
+    ['生年月日', dob],
+    ['メールアドレス', val('email')],
+    ['電話番号', val('tel')],
+    ['郵便番号', val('zip')],
+    ['ご住所', addr],
+    ['最終学歴', val('education')],
+    ['経歴', val('career')],
+    ['メッセージ', val('message')],
+    ['履歴書', files],
+  ];
+  confirmList.innerHTML = rows.map(([k,v])=>
+    `<div class="ci"><dt>${k}</dt><dd class="${v?'':'empty'}">${v?v.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/\n/g,'<br>'):'（未入力）'}</dd></div>`
+  ).join('');
+}
+
+// 入力 → 確認
+form.addEventListener('submit',function(e){
   e.preventDefault();
   if(!this.checkValidity()){this.reportValidity();return;}
   if(!checkEmail()){emailConfirm.focus();return;}
-  // ※ 送信先（バックエンド）は後日設定予定
-  this.style.display='none';
-  document.getElementById('thanks').classList.add('show');
+  buildConfirm();
+  form.style.display='none';
+  confirm.classList.add('show');
+  setStep(2);
   window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// 確認 → 修正に戻る
+document.getElementById('btnEdit').addEventListener('click',function(){
+  confirm.classList.remove('show');
+  form.style.display='';
+  setStep(1);
+  window.scrollTo({top:0,behavior:'smooth'});
+});
+
+// 確認 → 送信（完了ページへ）
+document.getElementById('btnFinalSubmit').addEventListener('click',function(){
+  // ※ 送信先（バックエンド）は後日設定予定。現状は完了ページへ遷移します。
+  setStep(3);
+  window.location.href='thanks.html';
 });
 </script>
 </body>
